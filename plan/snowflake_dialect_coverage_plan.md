@@ -470,6 +470,63 @@ objeto está publicado como artifact de la sesión de auditoría; las ~290 sente
 usadas quedaron en el scratchpad de esa sesión y deben reutilizarse como semilla de los fixtures
 de cada PR (regenerándolas es trivial: cada tabla incluye el ejemplo mínimo).
 
+## 6. Estado de la implementación
+
+Las once ramas están implementadas y pusheadas al fork. Todas parten de `main` (commit
+`f878214`) salvo las apiladas, y todas pasan `pytest test/dialects/dialects_test.py -k snowflake`,
+`pytest test/dialects/snowflake_test.py`, la regeneración completa de fixtures
+(`python test/generate_parse_fixture_yml.py`, sin diffs en YML ajenos salvo donde se indica) y
+`ruff format --check` + `ruff check`.
+
+| PR | Rama | Base | Estado |
+|----|------|------|--------|
+| A | `snowflake-governance-policies` | main | pusheada |
+| B | `snowflake-table-gaps` | main | pusheada |
+| C | `snowflake-materialized-view` | main | pusheada |
+| D | `snowflake-view-governance-alter` | A | pusheada |
+| E1 | `snowflake-dynamic-table-clauses` | main | pusheada |
+| E2 | `snowflake-dynamic-table-columns-governance` | A | pusheada |
+| F | `snowflake-stream` | main | pusheada |
+| G | `snowflake-task` | main | pusheada |
+| H | `snowflake-procedure` | main | pusheada |
+| I | `snowflake-scripting-control-flow` | main | pusheada |
+| J | `snowflake-scripting-cursors-declare-body` | I | pusheada |
+
+### Desviaciones respecto al plan original
+
+- **Table #13 (`ALTER TABLE ... SET CONTACT`) se movió de la PR A a la PR B**, porque comparte
+  el bloque `SET` con Table #12 (lista de parámetros separada por comas) y mantenerlos juntos
+  evita un conflicto garantizado entre ambas ramas.
+- **La PR E2 se redujo**: al cablear la gobernanza en `CreateTableStatementSegment` y
+  `ColumnConstraintSegment`, la PR A ya resolvió DT #2, #7 y #8 para dynamic tables. E2 queda
+  con las acciones de columna del `ALTER` (el TODO del código) más fixtures que cubren las
+  cláusulas heredadas.
+- **Correcciones no previstas incluidas** (todas verificadas contra la documentación):
+  - `SearchOptimizationActionSegment` tenía el `optional=True` mal colocado, lo que hacía
+    obligatoria la cláusula `ON` en `DROP/SUSPEND/RESUME SEARCH OPTIMIZATION` (PR B).
+  - Los cuerpos de bucle usaban `Delimited`, que trataba como delimitadores propios los `;`
+    internos de una sentencia anidada; un bucle con un `IF` dentro no parseaba, incluido el
+    `FOR` ya existente (PR I).
+  - Dos fixtures existentes contenían sintaxis inválida y se corrigieron:
+    `alter_table.sql` (`DROP CONSTRAINT c UNIQUE cols`) en la PR B y
+    `alter_materialized_view.sql` (`unset tag my_tag = '...'`) en la PR C.
+- **Parámetros de TASK con valor identificador**: en lugar de permitir identificadores en la
+  regla genérica `<param> = <valor>` (lo que ensombrecía a `LOG_LEVEL` y degradaba su árbol de
+  parseo), se añadió `TaskIdentifierValuedParameterGrammar` para `ERROR_INTEGRATION`,
+  `SUCCESS_INTEGRATION` y `FINALIZE`.
+
+### Cambios en YML de fixtures existentes
+
+Solo tres, todos intencionados y explicados en el mensaje de commit correspondiente:
+`alter_table.yml` y `alter_materialized_view.yml` (fixtures inválidos corregidos) y
+`alter_task_modify_when.yml` (`MODIFY WHEN` pasa a anidar bajo el mismo segmento de expresión
+que usa `CREATE TASK`).
+
+### Pendiente
+
+Abrir las PRs contra `sqlfluff/sqlfluff` siguiendo las olas de la sección 3: primero A, B, C,
+E1, F, G, H; después D y E2 (rebase sobre A al mergearse); por último I y J.
+
 ## 6. Notas operativas
 
 - **Flujo de PRs**: ramas en el fork `davidfierro/sqlfluff` → PR hacia `sqlfluff/sqlfluff`
