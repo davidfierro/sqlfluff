@@ -35,13 +35,10 @@ Reference documentation:
 ### Pull Request checklist
 - [x] Please confirm you have completed any of the necessary steps below.
 
-- Included test cases to demonstrate any code changes, which may be one or more of the following:
-  - `.yml` rule test cases in `test/fixtures/rules/std_rule_cases`.
-  - [x] `.sql`/`.yml` parser test cases in `test/fixtures/dialects` (note YML files can be auto generated with `tox -e generate-fixture-yml`).
-  - Full autofix test cases in `test/fixtures/linter/autofix`.
-  - Other.
-- [x] Added appropriate documentation for the change.
-- [x] Created GitHub issues for any relevant followups/future enhancements if appropriate.
+- Included test cases to demonstrate any code changes:
+  - `.sql`/`.yml` parser test cases in `test/fixtures/dialects/snowflake` (YML files generated with `python test/generate_parse_fixture_yml.py -d snowflake`, and the full cross-dialect regeneration produces no unrelated diffs).
+- Added appropriate documentation for the change: the docstrings of the touched segments link to the relevant official Snowflake documentation (dialect reference docs are auto-generated).
+- No followup issues were needed for this change.
 
 ### AI assistance declaration
 
