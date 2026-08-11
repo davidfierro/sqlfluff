@@ -19,7 +19,7 @@ ALTER TASK
 - SET TAG / UNSET TAG
 - MODIFY WHEN now takes the same boolean expression as CREATE TASK
   instead of only a boolean literal, so
-  'MODIFY WHEN SYSTEM(...)' parses
+  'MODIFY WHEN SYSTEM$STREAM_HAS_DATA(...)' parses
 - REMOVE WHEN
 - MODIFY AS accepts the same bodies as CREATE TASK, including Snowflake
   Scripting blocks
