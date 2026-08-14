@@ -59,3 +59,37 @@ review feedback: ...".
 > grammar and fixtures, as disclosed in the AI assistance declaration in the description;
 > every clause was validated against the official Snowflake documentation and the full
 > dialect test suite locally, and I take responsibility for the final result.
+
+---
+
+# Segunda ronda (PRs #8342, #8343, #8344)
+
+## #8342 (view-governance) — commit 7569f68
+
+> Valid catch, addressed. The single-property SET/UNSET alternatives that duplicated the
+> unified property clauses are removed (the legacy bare `COMMENT = ...` form stays, as it is
+> not covered elsewhere). While fixing it we also noticed the CREATE-side grammars leaked
+> their optional `WITH` into the ALTER branches, so `SET WITH AGGREGATION POLICY` parsed;
+> the SET branches now spell the sequences explicitly and that form is rejected.
+
+## #8343 (dynamic-table-columns) — commit 16d07d5
+
+> All three points addressed:
+> 1. The USING clause of the new segment now takes column references only, per the docs.
+> 2. `SET PROJECTION POLICY` is spelled explicitly, so `SET WITH PROJECTION POLICY` no
+>    longer parses.
+> 3. The masking clause moves to a shared `MaskingPolicyGrammar`. The pre-existing inline
+>    `WITH MASKING POLICY` forms of CREATE TABLE / ADD COLUMN are intentionally not rewired:
+>    the existing fixtures exercise expressions there (`USING(col, col > 10)`), so
+>    tightening those belongs to a separate discussion.
+
+## #8344 (scripting-control-flow) — commit 3bc5b89
+
+> All three points addressed:
+> 1. WHILE — and, for the same reason, REPEAT ... UNTIL — now require the parenthesised
+>    condition; the unbracketed forms no longer parse.
+> 2. The loop body statement list moves to a shared private helper used by the four loop
+>    segments.
+> 3. Fixtures now cover closing labels, ITERATE, labelled BREAK/CONTINUE and
+>    multi-statement CASE branches. Writing them surfaced a real bug (a CASE branch with
+>    more than one statement did not parse); fixed in the same commit.
