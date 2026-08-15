@@ -93,3 +93,29 @@ review feedback: ...".
 > 3. Fixtures now cover closing labels, ITERATE, labelled BREAK/CONTINUE and
 >    multi-statement CASE branches. Writing them surfaced a real bug (a CASE branch with
 >    more than one statement did not parse); fixed in the same commit.
+
+---
+
+# Tercera ronda
+
+## #8342 (view-governance) — respuesta al comentario de @alanmcruickshank — commit 692e360
+
+> Good call — done. The SET/UNSET actions for aggregation, join, masking and projection
+> policies now live in shared grammars (`AggregationPolicyActionGrammar`,
+> `JoinPolicyActionGrammar`, `MaskingPolicyActionGrammar`, `ProjectionPolicyActionGrammar`),
+> referenced from the three statements that previously spelled them out:
+> `DataGovernancePolicyTagActionSegment` (tables/dynamic tables), `AlterViewStatementSegment`
+> and `AlterDynamicTableColumnActionSegment`.
+>
+> One deliberate parse tree change: the ENTITY KEY column list of `SET AGGREGATION POLICY` on
+> ALTER TABLE now parses as column references, aligning it with the CREATE side which already
+> used `ColumnReferenceSegment` (that is the small YAML diff in the fixtures). I stopped short
+> of unifying the row access policy actions: the view statement names the policy as a function
+> reference while the table one uses an object reference, so merging those would ripple
+> through pre-existing parse trees — happy to do it as a follow-up if you'd prefer.
+
+## #8344 (scripting-control-flow) — sin respuesta necesaria
+
+> Aprobada por @alanmcruickshank ("LGTM"); el conflicto con main quedo resuelto con el merge
+> commit d66a89c y deberia reentrar en la merge queue automaticamente o con un re-queue del
+> mantenedor.
