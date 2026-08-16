@@ -8,8 +8,7 @@ DATABASE
   `{ ENABLE | DISABLE } { REPLICATION | FAILOVER } TO ACCOUNTS <acct> [ , ... ]
   [ IGNORE EDITION CHECK ]`, `ALTER DATABASE <name> REFRESH` and
   `ALTER DATABASE <name> PRIMARY`.
-- Bug fix: `ALTER DATABASE <name> UNSET EVENT_TABLE` (the grammar demanded `= <ref>` on UNSET).
-- `OAUTH_*` properties on CREATE DATABASE.
+- `OAUTH_AUTHORIZATION_SERVER` and `OAUTH_SCOPES_SUPPORTED` on CREATE DATABASE.
 
 SCHEMA
 - Modern object parameters on CREATE/ALTER SCHEMA (EXTERNAL_VOLUME, CATALOG, LOG_LEVEL,
@@ -30,9 +29,8 @@ Reference documentation:
 
 ### Are there any other side effects of this change that we should be aware of?
 
-None expected: every change makes previously-unparsable documented syntax parse, and the UNSET
-EVENT_TABLE fix only removes the spurious `= <ref>` requirement on the UNSET side (SET is
-unchanged). No existing fixture YAML changes.
+None expected: every change makes previously-unparsable documented syntax parse. No existing
+fixture YAML changes.
 
 ### Pull Request checklist
 - [x] Please confirm you have completed any of the necessary steps below.

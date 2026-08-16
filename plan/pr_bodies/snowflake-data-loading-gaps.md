@@ -6,8 +6,8 @@
 STAGE
 - The six inline `DIRECTORY = ( ... )` blocks of CREATE STAGE are extracted into shared,
   per-cloud directory-table grammars (they had drifted apart), and gain the documented
-  parameters that were missing: `AUTO_REFRESH` on internal stages, `REFRESH_ON_CREATE`, and
-  `NOTIFICATION_INTEGRATION` on the S3 branch.
+  parameters that were missing: `AUTO_REFRESH` on internal stages, `REFRESH_ON_CREATE` on all
+  external stages, and `NOTIFICATION_INTEGRATION` on the GCS and Azure branches.
 - `CREATE TEMP STAGE` (only TEMPORARY was accepted).
 - `s3gov://`, `s3china://` and `s3compat://` URLs, plus the `ENDPOINT = '...'` parameter for
   S3-compatible storage.

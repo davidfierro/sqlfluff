@@ -12,8 +12,7 @@
   - `MEMOIZABLE` (SQL UDFs)
   - `RETURNS <type> NULL` (the grammar only accepted `NOT NULL`; same fix procedures already
     received)
-  - `ARTIFACT_REPOSITORY = ...` and related Python options (mirroring the procedure grammar)
-  - `RESOURCE_CONSTRAINT = (architecture = 'x86')`
+  - `ARTIFACT_REPOSITORY = ...` for Python UDFs (mirroring the procedure grammar)
 
 Reference documentation:
 

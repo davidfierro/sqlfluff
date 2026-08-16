@@ -211,6 +211,26 @@ Keywords nuevas previstas por PR (verificar al implementar; regla: keyword ausen
 Recuento: 65 gaps = 56 en alcance (R1: 3, R2: 7, R3: 6, R4: 5, R5: 7, R6: 8, R7: 20) + 9
 pospuestos.
 
+### Desviaciones detectadas durante la implementación (2026-08-16)
+
+Al contrastar cada gap contra la doc oficial antes de implementarlo, dos resultaron no estar
+respaldados por la documentación vigente y se descartaron (habrían provocado exactamente el
+feedback de revisión que queremos evitar):
+
+- **Func·4 `RESOURCE_CONSTRAINT` en CREATE FUNCTION**: la cadena no aparece hoy ni en
+  create-function ni en create-procedure. Descartado.
+- **Cont·10 "bug" de `UNSET EVENT_TABLE`**: la doc actual de ALTER DATABASE muestra
+  `UNSET EVENT_TABLE = <nombre>` (con valor); la gramática actual ya coincide. Descartado.
+- **Carga·5 (corrección)**: según la doc, `NOTIFICATION_INTEGRATION` en el bloque DIRECTORY
+  es de GCS y Azure (no de S3); S3 admite ENABLE / REFRESH_ON_CREATE / AUTO_REFRESH. Se
+  implementó doc-fiel.
+- La lista de params de SCHEMA (Cont·13) se implementó completa **salvo** los 4 `ICEBERG_*`
+  (ICEBERG_DEFAULT_DDL_COLLATION, ICEBERG_VERSION_DEFAULT, ICEBERG_MERGE_ON_READ_BEHAVIOR,
+  ENABLE_ICEBERG_MERGE_ON_READ), excluidos de la ronda por decisión de alcance.
+
+Total implementado: **54 gaps en 7 ramas**, todas pusheadas y validadas (suite snowflake,
+negativos por feature, regeneración cross-dialecto sin diffs ajenos, ruff).
+
 ## 6. Estado de la ronda 1 (a fecha de este documento)
 
 Mergeadas: #8305 (A), #8306 (B), #8307 (C), #8308 (E1), #8309 (F), #8310 (G), #8311 (H),
