@@ -4,7 +4,7 @@ Cada enlace abre el formulario de PR en `sqlfluff/sqlfluff` con la rama, el tít
 cuerpo ya rellenados: solo hay que pulsar **Create pull request**. Si GitHub recortase el
 cuerpo (URL demasiado larga), pegar a mano el contenido del `.md` correspondiente.
 
-## Ola 1 — mergeadas: A #8305, B #8306, C #8307, E1 #8308, F #8309, G #8310 · abierta y mergeable: H #8311
+## Ola 1 — mergeadas TODAS: A #8305, B #8306, C #8307, E1 #8308, F #8309, G #8310, H #8311
 
 ### `snowflake-governance-policies`
 - **Titulo:** Snowflake: data governance policies on tables (projection/aggregation/join policy, contacts, COPY TAGS, storage lifecycle)
@@ -41,7 +41,7 @@ cuerpo (URL demasiado larga), pegar a mano el contenido del `.md` correspondient
 - [Abrir PR pre-rellenada](https://github.com/sqlfluff/sqlfluff/compare/main...davidfierro:sqlfluff:snowflake-procedure?quick_pull=1&title=Snowflake%3A+PROCEDURE+gaps+%28TEMP%2C+argument+direction%2C+RESTRICTED+CALLER%2C+anonymous+procedures%2C+CALL+INTO%29&body=%23%23%23+Brief+summary+of+the+change+made%0A%0ACREATE+PROCEDURE%0A-+TEMP+%2F+TEMPORARY%0A-+argument+direction+%7B+IN+%7C+INPUT+%7C+OUT+%7C+OUTPUT+%7D+for+SQL+procedures%0A-+EXECUTE+AS+RESTRICTED+CALLER%0A-+RETURNS+%3Ctype%3E+NULL%2C+not+only+%27NOT+NULL%27%0A-+ARTIFACT_REPOSITORY+%3D+%3Cname%3E%0A%0AThe+option+list+is+extracted+into+ProcedureDefinitionOptionsGrammar+so%0Athat+the+anonymous+procedure+form+can+share+it.%0A%0ACALL%0A-+CALL+%3Cprocedure%3E%28+...+%29+INTO+%3A%3Cvariable%3E%0A-+anonymous+procedures%3A+WITH+%3Cname%3E+AS+PROCEDURE+%28+...+%29+RETURNS+...%0A++AS+%3Cbody%3E+CALL+%3Cname%3E%28+...+%29%0A%0AALTER+PROCEDURE%0A-+EXECUTE+AS+RESTRICTED+CALLER%0A-+SET+METRIC_LEVEL%2C+which+already+had+a+segment+that+nothing+referenced%0A-+SET+AUTO_EVENT_LOGGING%0A-+LOG_LEVEL%2C+TRACE_LEVEL+and+METRIC_LEVEL+also+accept+the+quoted+value%0A++used+by+the+documentation%2C+in+addition+to+the+bare+keyword%0A%0AReference+documentation%3A%0A%0A-+https%3A%2F%2Fdocs.snowflake.com%2Fen%2Fsql-reference%2Fsql%2Fcreate-procedure%0A-+https%3A%2F%2Fdocs.snowflake.com%2Fen%2Fsql-reference%2Fsql%2Falter-procedure%0A-+https%3A%2F%2Fdocs.snowflake.com%2Fen%2Fsql-reference%2Fsql%2Fcall%0A-+https%3A%2F%2Fdocs.snowflake.com%2Fen%2Fsql-reference%2Fsql%2Fcall-with%0A%0A%23%23%23+Are+there+any+other+side+effects+of+this+change+that+we+should+be+aware+of%3F%0A%0ATwo+shared+pieces+are+touched%3A%0A%0A1.+%60FunctionParameterGrammar%60+is+shared+with+functions%2C+so+the+optional+argument+direction+is+accepted+there+too.+It+stays+optional%2C+so+nothing+that+parsed+before+stops+parsing.%0A2.+%60LOG_LEVEL%60%2C+%60TRACE_LEVEL%60+and+%60METRIC_LEVEL%60+now+also+accept+the+quoted+value+used+by+the+documentation%2C+in+addition+to+the+bare+keyword.+This+is+additive+and+shared+with+tasks%2C+dynamic+tables+and+databases.%0A%0AThe+CREATE+PROCEDURE+option+list+is+extracted+into+%60ProcedureDefinitionOptionsGrammar%60+so+the+anonymous+procedure+form+can+share+it.+No+existing+fixture+YAML+changes.%0A%0A%23%23%23+Pull+Request+checklist%0A-+%5Bx%5D+Please+confirm+you+have+completed+any+of+the+necessary+steps+below.%0A%0A-+Included+test+cases+to+demonstrate+any+code+changes%3A%0A++-+%60.sql%60%2F%60.yml%60+parser+test+cases+in+%60test%2Ffixtures%2Fdialects%2Fsnowflake%60+%28YML+files+generated+with+%60python+test%2Fgenerate_parse_fixture_yml.py+-d+snowflake%60%2C+and+the+full+cross-dialect+regeneration+produces+no+unrelated+diffs%29.%0A-+Added+appropriate+documentation+for+the+change%3A+the+docstrings+of+the+touched+segments+link+to+the+relevant+official+Snowflake+documentation+%28dialect+reference+docs+are+auto-generated%29.%0A-+No+followup+issues+were+needed+for+this+change.%0A%0A%23%23%23+AI+assistance+declaration%0A%0AThis+change+was+developed+with+AI+assistance%3A+the+grammar+changes+and+the+test+fixtures+were%0Adrafted+with+an+LLM.+Every+clause+was+checked+against+the+official+Snowflake+documentation+linked%0Aabove%2C+and+each+statement+in+the+fixtures+was+verified+locally+with%0A%60sqlfluff+parse+--dialect+snowflake%60.+The+full+dialect+suite%0A%28%60pytest+test%2Fdialects%2Fdialects_test.py+-k+snowflake%60+and+%60pytest+test%2Fdialects%2Fsnowflake_test.py%60%29%0Apasses%2C+a+full+%60python+test%2Fgenerate_parse_fixture_yml.py%60+produces+no+diff+outside+the+fixtures%0Alisted+above%2C+and+%60ruff+format+--check%60+%2F+%60ruff+check%60+are+clean.%0A)
 - Alternativa manual: [comparar](https://github.com/sqlfluff/sqlfluff/compare/main...davidfierro:sqlfluff:snowflake-procedure?expand=1) y pegar [`snowflake-procedure.md`](./snowflake-procedure.md)
 
-## Ola 2 — DESBLOQUEADA: A #8305 mergeada; D y E2 rebasadas sobre main y listas para ABRIR YA
+## Ola 2 — E2 #8343 mergeada · D #8342 abierta (refactor pusheado, pendiente de re-revision)
 
 ### `snowflake-view-governance-alter`
 - **Titulo:** Snowflake: governance policies on views and ALTER VIEW gaps
@@ -53,7 +53,7 @@ cuerpo (URL demasiado larga), pegar a mano el contenido del `.md` correspondient
 - [Abrir PR pre-rellenada](https://github.com/sqlfluff/sqlfluff/compare/main...davidfierro:sqlfluff:snowflake-dynamic-table-columns-governance?quick_pull=1&title=Snowflake%3A+DYNAMIC+TABLE+column+level+actions+and+governance+clauses&body=%23%23%23+Brief+summary+of+the+change+made%0A%0AALTER+DYNAMIC+TABLE+accepted+no+column+level+governance+action%2C+which%0Awas+flagged+by+a+TODO+in+the+dialect.+It+now+supports+the+documented%0AdataGovnPolicyTagAction+on+columns+through+a+dedicated+segment%3A%0A%0A-+%7B+ALTER+%7C+MODIFY+%7D+%5B+COLUMN+%5D+%3Ccol%3E+SET+MASKING+POLICY+%3Cname%3E%0A++%5B+USING+%28+%3Ccols%3E+%29+%5D+%5B+FORCE+%5D+%2F+UNSET+MASKING+POLICY%0A-+%7B+ALTER+%7C+MODIFY+%7D+%5B+COLUMN+%5D+%3Ccol%3E+SET+PROJECTION+POLICY+%3Cname%3E%0A++%5B+FORCE+%5D+%2F+UNSET+PROJECTION+POLICY%0A-+%7B+ALTER+%7C+MODIFY+%7D+%5B+COLUMN+%5D+%3Ccol%3E+SET+TAG+%3Ctag%3E+%3D+%27%3Cvalue%3E%27+%5B+%2C+...+%5D%0A++%2F+UNSET+TAG+%3Ctag%3E+%5B+%2C+...+%5D%0A%0AAlso+adds+fixtures+covering+the+governance+clauses+that+dynamic+tables%0Ashare+with+tables+%28COPY+TAGS%2C+aggregation+policy%2C+column+projection%0Apolicy+and+WITH+CONTACT%29%2C+so+the+shared+grammars+stay+exercised+for%0Athis+statement+too.%0A%0AReference+documentation%3A%0A%0A-+https%3A%2F%2Fdocs.snowflake.com%2Fen%2Fsql-reference%2Fsql%2Fcreate-dynamic-table%0A-+https%3A%2F%2Fdocs.snowflake.com%2Fen%2Fsql-reference%2Fsql%2Falter-dynamic-table%0A%0A%23%23%23+Are+there+any+other+side+effects+of+this+change+that+we+should+be+aware+of%3F%0A%0ANone.+The+column+level+actions+live+in+a+dedicated+segment+rather+than+being+folded+into+%60DataGovernancePolicyTagActionSegment%60%2C+so+the+parse+trees+of+%60ALTER+TABLE%60+are+untouched.+No+existing+fixture+YAML+changes.%0A%0A%23%23%23+Pull+Request+checklist%0A-+%5Bx%5D+Please+confirm+you+have+completed+any+of+the+necessary+steps+below.%0A%0A-+Included+test+cases+to+demonstrate+any+code+changes%3A%0A++-+%60.sql%60%2F%60.yml%60+parser+test+cases+in+%60test%2Ffixtures%2Fdialects%2Fsnowflake%60+%28YML+files+generated+with+%60python+test%2Fgenerate_parse_fixture_yml.py+-d+snowflake%60%2C+and+the+full+cross-dialect+regeneration+produces+no+unrelated+diffs%29.%0A-+Added+appropriate+documentation+for+the+change%3A+the+docstrings+of+the+touched+segments+link+to+the+relevant+official+Snowflake+documentation+%28dialect+reference+docs+are+auto-generated%29.%0A-+No+followup+issues+were+needed+for+this+change.%0A%0A%23%23%23+AI+assistance+declaration%0A%0AThis+change+was+developed+with+AI+assistance%3A+the+grammar+changes+and+the+test+fixtures+were%0Adrafted+with+an+LLM.+Every+clause+was+checked+against+the+official+Snowflake+documentation+linked%0Aabove%2C+and+each+statement+in+the+fixtures+was+verified+locally+with%0A%60sqlfluff+parse+--dialect+snowflake%60.+The+full+dialect+suite%0A%28%60pytest+test%2Fdialects%2Fdialects_test.py+-k+snowflake%60+and+%60pytest+test%2Fdialects%2Fsnowflake_test.py%60%29%0Apasses%2C+a+full+%60python+test%2Fgenerate_parse_fixture_yml.py%60+produces+no+diff+outside+the+fixtures%0Alisted+above%2C+and+%60ruff+format+--check%60+%2F+%60ruff+check%60+are+clean.%0A)
 - Alternativa manual: [comparar](https://github.com/sqlfluff/sqlfluff/compare/main...davidfierro:sqlfluff:snowflake-dynamic-table-columns-governance?expand=1) y pegar [`snowflake-dynamic-table-columns-governance.md`](./snowflake-dynamic-table-columns-governance.md)
 
-## Ola 3 — la I puede abrirse YA (al dia con main); J queda lista y se abre tras el merge de I
+## Ola 3 — I #8344 abierta, aprobada y mergeable; J queda lista y se abre tras el merge de I
 
 ### `snowflake-scripting-control-flow`
 - **Titulo:** Snowflake Scripting: WHILE/LOOP/REPEAT/CASE control flow
@@ -65,3 +65,46 @@ cuerpo (URL demasiado larga), pegar a mano el contenido del `.md` correspondient
 - [Abrir PR pre-rellenada](https://github.com/sqlfluff/sqlfluff/compare/main...davidfierro:sqlfluff:snowflake-scripting-cursors-declare-body?quick_pull=1&title=Snowflake+Scripting%3A+cursor+statements+and+DECLARE+prefixed+procedure%2Ftask+bodies&body=%23%23%23+Brief+summary+of+the+change+made%0A%0A-+OPEN+%3Ccursor%3E+%5B+USING+%28+%3Cbind%3E+%5B+%2C+...+%5D+%29+%5D%2C+FETCH+%3Ccursor%3E+INTO%0A++%3Cvar%3E+%5B+%2C+...+%5D+and+CLOSE+%3Ccursor%3E.+Only+DECLARE+...+CURSOR+FOR+and%0A++the+FOR+cursor+loop+were+supported%2C+so+a+cursor+driven+explicitly+did%0A++not+parse.%0A-+The+body+of+CREATE+PROCEDURE+and+CREATE+TASK+may+declare+variables%0A++before+its+block%2C+i.e.+%27AS+DECLARE+...+%3B+BEGIN+...+END%27.+Both+bodies%0A++accepted+only+a+bare+block%2C+because+the+semicolon+separating+the%0A++declarations+from+the+block+is+not+a+statement+terminator+there.%0A%0AReference+documentation%3A%0A%0A-+https%3A%2F%2Fdocs.snowflake.com%2Fen%2Fdeveloper-guide%2Fsnowflake-scripting%2Fcursors%0A-+https%3A%2F%2Fdocs.snowflake.com%2Fen%2Fsql-reference%2Fsql%2Fcreate-procedure%0A-+https%3A%2F%2Fdocs.snowflake.com%2Fen%2Fsql-reference%2Fsql%2Fcreate-task%0A%0A%23%23%23+Are+there+any+other+side+effects+of+this+change+that+we+should+be+aware+of%3F%0A%0ANone.+%60ScriptingDeclareStatementSegment%60+is+left+untouched%3A+the+combined+%60DECLARE+...+%3B+BEGIN+...+END%60+form+is+a+separate+grammar+used+only+by+procedure+and+task+bodies%2C+so+top+level+%60DECLARE%60+statements+keep+their+current+parse+tree.+No+existing+fixture+YAML+changes.%0A%0A%23%23%23+Pull+Request+checklist%0A-+%5Bx%5D+Please+confirm+you+have+completed+any+of+the+necessary+steps+below.%0A%0A-+Included+test+cases+to+demonstrate+any+code+changes%3A%0A++-+%60.sql%60%2F%60.yml%60+parser+test+cases+in+%60test%2Ffixtures%2Fdialects%2Fsnowflake%60+%28YML+files+generated+with+%60python+test%2Fgenerate_parse_fixture_yml.py+-d+snowflake%60%2C+and+the+full+cross-dialect+regeneration+produces+no+unrelated+diffs%29.%0A-+Added+appropriate+documentation+for+the+change%3A+the+docstrings+of+the+touched+segments+link+to+the+relevant+official+Snowflake+documentation+%28dialect+reference+docs+are+auto-generated%29.%0A-+No+followup+issues+were+needed+for+this+change.%0A%0A%23%23%23+AI+assistance+declaration%0A%0AThis+change+was+developed+with+AI+assistance%3A+the+grammar+changes+and+the+test+fixtures+were%0Adrafted+with+an+LLM.+Every+clause+was+checked+against+the+official+Snowflake+documentation+linked%0Aabove%2C+and+each+statement+in+the+fixtures+was+verified+locally+with%0A%60sqlfluff+parse+--dialect+snowflake%60.+The+full+dialect+suite%0A%28%60pytest+test%2Fdialects%2Fdialects_test.py+-k+snowflake%60+and+%60pytest+test%2Fdialects%2Fsnowflake_test.py%60%29%0Apasses%2C+a+full+%60python+test%2Fgenerate_parse_fixture_yml.py%60+produces+no+diff+outside+the+fixtures%0Alisted+above%2C+and+%60ruff+format+--check%60+%2F+%60ruff+check%60+are+clean.%0A)
 - Alternativa manual: [comparar](https://github.com/sqlfluff/sqlfluff/compare/main...davidfierro:sqlfluff:snowflake-scripting-cursors-declare-body?expand=1) y pegar [`snowflake-scripting-cursors-declare-body.md`](./snowflake-scripting-cursors-declare-body.md)
 
+
+---
+
+# Ronda 2 — pendiente de implementacion
+
+Plan: [`plan/snowflake_dialect_coverage_plan_round2.md`](../snowflake_dialect_coverage_plan_round2.md).
+Las 7 ramas son independientes; los enlaces pre-rellenados se generaran cuando cada rama
+exista en el fork (hasta entonces, la URL de comparacion devolveria 404). Titulos ya fijados
+(van literales a las release notes):
+
+## Ola 1 (ronda 2)
+
+### `snowflake-query-gaps`
+- **Titulo:** Snowflake: mixed GROUPING SETS in GROUP BY, PIVOT aggregate alias, UNPIVOT IN-list aliases
+- Cuerpo: [`snowflake-query-gaps.md`](./snowflake-query-gaps.md)
+
+### `snowflake-function-gaps`
+- **Titulo:** Snowflake: CREATE DATA METRIC FUNCTION, TABLE(...) parameter signatures, MEMOIZABLE and other CREATE FUNCTION options
+- Cuerpo: [`snowflake-function-gaps.md`](./snowflake-function-gaps.md)
+
+### `snowflake-table-variants-gaps`
+- **Titulo:** Snowflake: event table WITH-less clauses, external table gaps (DELTA, USING TEMPLATE, row access ON), SHOW/DESC table variants
+- Cuerpo: [`snowflake-table-variants-gaps.md`](./snowflake-table-variants-gaps.md)
+
+## Ola 2 (ronda 2)
+
+### `snowflake-integrations-network`
+- **Titulo:** Snowflake: EXTERNAL ACCESS INTEGRATION, ALTER for API/notification/security integrations, NETWORK RULE gaps, CREATE OR ALTER SEQUENCE
+- Cuerpo: [`snowflake-integrations-network.md`](./snowflake-integrations-network.md)
+
+### `snowflake-warehouse-share`
+- **Titulo:** Snowflake: adaptive warehouses (TYPE, GENERATION, ADD/DROP TABLES), name-less ALTER WAREHOUSE, ALTER SHARE SET COMMENT, CREATE OR ALTER SHARE
+- Cuerpo: [`snowflake-warehouse-share.md`](./snowflake-warehouse-share.md)
+
+### `snowflake-database-schema`
+- **Titulo:** Snowflake: ALTER DATABASE replication/failover family, modern schema parameters, contacts, clone clauses
+- Cuerpo: [`snowflake-database-schema.md`](./snowflake-database-schema.md)
+
+## Ola 3 (ronda 2)
+
+### `snowflake-data-loading-gaps`
+- **Titulo:** Snowflake: stage, file format and COPY INTO gaps (directory tables, s3-compatible URLs, LOAD_MODE, FILE_PROCESSOR, GCS encryption)
+- Cuerpo: [`snowflake-data-loading-gaps.md`](./snowflake-data-loading-gaps.md)
