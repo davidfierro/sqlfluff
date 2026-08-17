@@ -15,6 +15,11 @@
   - `TYPE = { IPV6 | GCPPSCID | COMPUTE_POOL }` and `MODE = SNOWFLAKE_MANAGED_STORAGE_VOLUME`
     on CREATE
   - `ALTER NETWORK RULE <name> SET / UNSET ...` (new segment, mirroring NETWORK POLICY)
+
+The building blocks these statements share (`ENABLED = ...`,
+`ALLOWED_AUTHENTICATION_SECRETS = ...`, the tag actions and the property set common to
+CREATE and ALTER of external access integrations) are added as reusable dialect grammars
+rather than being spelled out in each segment.
 - `CREATE OR ALTER SEQUENCE` (the sequence segment only accepted `OR REPLACE`).
 
 Reference documentation:
@@ -29,7 +34,9 @@ Reference documentation:
 
 The ALTER INTEGRATION generalisation keeps the property sets separate per integration type, so
 the existing STORAGE behaviour is unchanged and properties of one type are not accepted on
-another. No existing fixture YAML changes.
+another. Following the docs, UNSET takes a single option for the API, notification, security
+and network rule integrations, and only the external access integration accepts the comma
+separated list its documentation shows. No existing fixture YAML changes.
 
 ### Pull Request checklist
 - [x] Please confirm you have completed any of the necessary steps below.

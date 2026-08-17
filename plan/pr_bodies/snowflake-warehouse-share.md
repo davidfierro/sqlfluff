@@ -5,12 +5,13 @@
 
 WAREHOUSE
 - `WAREHOUSE_TYPE = ADAPTIVE`
-- `GENERATION = '1' | '2'` (quoted enumerated values, WarehouseSize-style)
+- `GENERATION = '1' | '2'`, typed with a MultiStringParser like the neighbouring
+  WAREHOUSE_SIZE and SCALING_POLICY values
 - `WITH TAG ( ... )` followed by further properties in CREATE WAREHOUSE
 - `ALTER WAREHOUSE [ IF EXISTS ] { SUSPEND | RESUME | ABORT ALL QUERIES }` with the warehouse
   name omitted (the optional name reference used to swallow the action keyword)
 - `ALTER WAREHOUSE <name> { ENABLE | DISABLE }`
-- Adaptive warehouse actions: `ADD TABLES (...)`, `DROP TABLES (...)`, `UNSET DCM PROJECT`
+- `ADD TABLES (...)` / `DROP TABLES (...)` (interactive warehouses) and `UNSET DCM PROJECT`
 
 SHARE
 - `ALTER SHARE <name> SET COMMENT = '...'` without the `ACCOUNTS` clause

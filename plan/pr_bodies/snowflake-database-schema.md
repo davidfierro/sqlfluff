@@ -16,9 +16,10 @@ SCHEMA
   previously accepted only 4 of the ~25 documented parameters), including the matching UNSET
   list.
 - `WITH CONTACT ( <purpose> = <contact> [ , ... ] )` on CREATE SCHEMA and `SET CONTACT` on
-  ALTER SCHEMA, reusing the existing contact grammar.
+  ALTER SCHEMA, reusing the existing `ContactBracketedGrammar`.
 - `CREATE TRANSIENT SCHEMA <name> CLONE <src>` and the `IGNORE { HYBRID TABLES | TABLES ... }`
-  clone clauses.
+  clone clauses, factored into a shared grammar also referenced by
+  `CREATE DATABASE ... CLONE` (behaviour preserving: no fixture changes).
 
 Reference documentation:
 
