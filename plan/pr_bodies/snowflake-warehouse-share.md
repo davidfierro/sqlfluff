@@ -1,4 +1,4 @@
-<!-- Title: Snowflake: adaptive warehouses (TYPE, GENERATION, ADD/DROP TABLES), name-less ALTER WAREHOUSE, ALTER SHARE SET COMMENT, CREATE OR ALTER SHARE -->
+<!-- Title: Snowflake: adaptive and interactive warehouse actions, name-less ALTER WAREHOUSE, ALTER SHARE SET COMMENT, CREATE OR ALTER SHARE -->
 <!-- Branch: davidfierro:snowflake-warehouse-share   Base: sqlfluff/sqlfluff@main -->
 
 ### Brief summary of the change made
