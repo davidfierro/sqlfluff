@@ -70,6 +70,21 @@ snowflake revisando el árbol a mano, `pytest test/dialects/dialects_test.py -k 
 `pytest test/dialects/snowflake_test.py`, bucle de negativos, regeneración cross-dialecto
 completa sin diffs ajenos, `ruff format --check` + `ruff check`.
 
+**Ampliación tras el CI rojo de #8351 (obligatorio a partir de ahora):**
+
+- `pytest test/rules/` **completo**. Un cambio de dialecto que re-tipa un nodo existente puede
+  romper casos de regla: al reutilizar `ansi.CubeRollupClauseSegment`, CUBE/ROLLUP pasaron de
+  `keyword` a `function_name_identifier` y CP01 (que solo rastrea `keyword`, `binary_operator`
+  y `date_part`) dejó de verlos → falló `CP01_test_fail_snowflake_group_by_cube`. Regla
+  práctica: si el diff regenera el YML de un fixture **preexistente**, hay que pasar la suite
+  de reglas.
+- `python -m mypy src/sqlfluff/dialects/dialect_snowflake.py`. Al sobrescribir una clase de
+  ANSI, copiar la anotación de `match_grammar` **de la clase base**: si la base no la anota,
+  mypy infiere `Sequence` y anotar `Matchable` en la subclase es un error de asignación
+  incompatible (rompe los jobs `mypy` y `pre-commit`).
+- Opcionalmente `pytest -m fix_suite -k snowflake` y `pytest -m rules_suite`, que son los jobs
+  "Dialect fix_suite / rules_suite" de CI.
+
 ## 3. Las 7 PRs
 
 Numeración R1–R7 (ronda 2). "Gap" referencia la tabla del informe de la segunda auditoría

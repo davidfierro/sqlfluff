@@ -150,3 +150,14 @@ review feedback: ...".
 > Done — the alternatives are now passed directly to `Delimited`, which already treats its
 > positional arguments as alternatives, so the nested `OneOf` was redundant. No behaviour
 > change (no fixture diffs).
+
+## #8351 (query-gaps), CI en rojo — commits ef442e1 y 244f1b6
+
+No hace falta respuesta en el hilo salvo que el revisor pregunte; para contexto:
+
+> The CI failures came from the CUBE / ROLLUP retyping. Reusing the ANSI segment made them
+> `function_name_identifier`, which took them out of scope for keyword capitalisation and broke
+> `CP01_test_fail_snowflake_group_by_cube`; the Snowflake override now keeps them as keywords
+> while retaining the dedicated `cube_rollup_clause` node. A follow-up commit drops the
+> `Matchable` annotation on that override, since the ANSI base class leaves `match_grammar`
+> unannotated and mypy infers the narrower `Sequence` there.
