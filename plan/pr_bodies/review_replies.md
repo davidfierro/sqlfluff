@@ -144,3 +144,9 @@ review feedback: ...".
 > Done — the external table ROW ACCESS POLICY clause now uses the same
 > `Ref.keyword("WITH", optional=True)` pattern as the event table segment. No behaviour
 > change (no fixture diffs).
+
+## #8351 (query-gaps), segundo hallazgo — commit 1922f4e
+
+> Done — the alternatives are now passed directly to `Delimited`, which already treats its
+> positional arguments as alternatives, so the nested `OneOf` was redundant. No behaviour
+> change (no fixture diffs).
