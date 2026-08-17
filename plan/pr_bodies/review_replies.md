@@ -161,3 +161,50 @@ No hace falta respuesta en el hilo salvo que el revisor pregunte; para contexto:
 > while retaining the dedicated `cube_rollup_clause` node. A follow-up commit drops the
 > `Matchable` annotation on that override, since the ANSI base class leaves `match_grammar`
 > unannotated and mypy infers the narrower `Sequence` there.
+
+---
+
+# Ronda 2 — olas 2 y 3 (PRs #8359, #8360, #8361, #8362)
+
+## #8359 (integrations-network) — 3 hallazgos
+
+### 1. Propiedades de cola Azure/GCP en ALTER NOTIFICATION INTEGRATION — VÁLIDO, commit 0f344b2
+
+> Valid catch for the outbound variants. The Azure Event Grid and Google Pub/Sub outbound
+> queue pages document AZURE_EVENT_GRID_TOPIC_ENDPOINT, AZURE_TENANT_ID and
+> GCP_PUBSUB_TOPIC_NAME as settable, and those are now accepted. The two inbound queue
+> variants document no provider specific SET properties beyond ENABLED / COMMENT / TAG, which
+> the segment already accepted, so nothing changes there.
+
+### 2. ALTER SECURITY INTEGRATION solo modela ENABLED/COMMENT — INTENCIONADO
+
+> This is deliberate and called out in the segment docstring. Before this PR the statement did
+> not parse at all; it now covers the properties every security integration type shares. The
+> type specific sets (OAuth, SAML2, SCIM, External OAuth) are a large surface that deserves its
+> own PR — modelling them halfway would either miss properties or accept them on the wrong
+> integration type. Happy to follow up with them separately.
+
+### 3. CREATE EXTERNAL ACCESS INTEGRATION admite omitir propiedades obligatorias — INTENCIONADO
+
+> ALLOWED_NETWORK_RULES and ENABLED are indeed required, but Snowflake accepts the properties
+> in any order, which AnySetOf models and a Sequence would not. This mirrors the existing
+> CreateExternalTableSegment in the same dialect, whose comment reads "The use of AnySetOf is
+> not strictly correct here, because LOCATION and FILE_FORMAT are required parameters. They can
+> however be in arbitrary order with the other parameters." The comment above the grammar says
+> the same.
+
+## #8360 (warehouse-share) — sin hallazgos
+
+## #8361 (database-schema) — 1 hallazgo, VÁLIDO, commit c2fce71
+
+> Good catch. The ALTER SCHEMA docs list DEFAULT_NOTEBOOK_COMPUTE_POOL_CPU and
+> DEFAULT_NOTEBOOK_COMPUTE_POOL_GPU under SET but omit them from the UNSET list, so a schema
+> that set either could not unset it. ALTER DATABASE documents both on either side, so the
+> schema UNSET list now accepts them too.
+
+## #8362 (data-loading) — commit abac5af
+
+> Addressed: LOAD_MODE and CLUSTER_AT_INGEST_TIME are documented for COPY INTO <table> only,
+> but they had been added to the copy options shared with COPY INTO <location>,
+> CREATE STAGE COPY_OPTIONS and CREATE TABLE. They now live in the COPY INTO <table> statement,
+> and the other three no longer accept them.
