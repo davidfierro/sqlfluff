@@ -119,3 +119,28 @@ review feedback: ...".
 > Aprobada por @alanmcruickshank ("LGTM"); el conflicto con main quedo resuelto con el merge
 > commit d66a89c y deberia reentrar en la merge queue automaticamente o con un re-queue del
 > mantenedor.
+
+---
+
+# Ronda 2 — ola 1 (PRs #8351, #8352, #8353)
+
+## #8351 (query-gaps) — commit f819a88
+
+> Valid catch, addressed. The reused ANSI GroupingSetsClauseSegment let a single grouping
+> expression list consume the whole bracketed list, so a ROLLUP / CUBE entry mixed with other
+> expressions parsed as a function call. The Snowflake override now matches the elements one
+> by one, so those entries get their `cube_rollup_clause` node. This relabels the contents of
+> GROUPING SETS in the existing `select_grouping_sets` fixture (elements hang directly off the
+> brackets now), in line with the tree changes this PR already declares.
+
+## #8352 (function-gaps) — commit 8947a67
+
+> Valid catch — the docs state OR REPLACE and IF NOT EXISTS are mutually exclusive, so the
+> fixture statement was invalid. It is now split into two statements, and while re-checking
+> the syntax block we also added the missing SECURE keyword to the segment.
+
+## #8353 (table-variants) — commit a777496
+
+> Done — the external table ROW ACCESS POLICY clause now uses the same
+> `Ref.keyword("WITH", optional=True)` pattern as the event table segment. No behaviour
+> change (no fixture diffs).
