@@ -82,9 +82,12 @@ jobs:
       run: tox -e ${{ matrix.job }}
 
   rust-lint:
-    # Rust formatting, lints and unit tests for the sqlfluffrs workspace.
-    # Integration tests (sqlfluffrs/tests/*.rs) are not run here; parity is
-    # covered by the python -rust suites below.
+    # Rust formatting, lints and tests for the sqlfluffrs workspace.
+    # Covers both the crates' unit tests and the integration tests under
+    # sqlfluffrs/tests/ (fixture/YAML parity against the Python-generated
+    # trees). The python -rust suites below check parity through the Python
+    # API; these run the Rust engine directly, so a regression that only
+    # shows up on the pure-Rust path is caught here.
     runs-on: ubuntu-latest
     steps:
 
@@ -133,9 +136,15 @@ jobs:
         working-directory: sqlfluffrs
         run: cargo clippy --workspace --all-targets --features python -- -D warnings
 
-      - name: Run unit tests
+      - name: Run tests
         working-directory: sqlfluffrs
-        run: cargo test --workspace --lib
+        # --tests covers the crates' unit tests plus the integration targets
+        # under sqlfluffrs/tests/. Not --all-targets: that would also build
+        # and run the criterion bench targets. Linking the integration
+        # binaries is cheap (~5s) because every workspace crate is already
+        # built as an rlib by this point; the added time is test execution,
+        # dominated by fixture_tests.rs sweeping every dialect.
+        run: cargo test --workspace --tests
 
   rs-build-linux-x86_64:
     # Fast build for CI testing (always runs)
