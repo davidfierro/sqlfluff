@@ -219,3 +219,16 @@ CopyOptionsSegment._copy_options_matchables."
 > parameter segments that COPY INTO shares, whose documented external location parameters are
 > only STORAGE_INTEGRATION / CREDENTIALS / ENCRYPTION. The stage statements now reference per
 > cloud grammars that add the stage only parameters on top of the shared ones.
+
+## #8362 (data-loading), tercer hallazgo — VÁLIDO, commit 7b02e0e
+
+Hallazgo del bot (P3): el refactor dejaba ENDPOINT, AWS_ACCESS_POINT_ARN y
+USE_PRIVATELINK_ENDPOINT como hijos sueltos de create/alter_stage_statement mientras
+STORAGE_INTEGRATION/CREDENTIALS/ENCRYPTION seguían dentro del nodo `stage_parameters`.
+
+> Valid catch, addressed. The parameters shared with the external locations of COPY INTO move
+> to grammars, which the segments COPY INTO references keep using unchanged, and the stage
+> statements now reference per cloud `stage_parameters` segments (S3StageParameters,
+> GCSStageParameters, AzureBlobStorageStageParameters) that group every parameter in a single
+> node. Only the stage fixtures added by this PR change: the stage only parameters now sit
+> inside the `stage_parameters` node instead of hanging off the statement.
