@@ -1,5 +1,5 @@
 <!-- Title: Snowflake Scripting: cursor statements and DECLARE prefixed procedure/task bodies -->
-<!-- Branch: davidfierro:snowflake-scripting-cursors-declare-body   Base: sqlfluff/sqlfluff@main   (depends on `snowflake-scripting-control-flow`, open only after it is merged) -->
+<!-- Branch: davidfierro:snowflake-scripting-cursors-declare-body   Base: sqlfluff/sqlfluff@main -->
 
 ### Brief summary of the change made
 
