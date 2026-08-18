@@ -202,9 +202,20 @@ No hace falta respuesta en el hilo salvo que el revisor pregunte; para contexto:
 > that set either could not unset it. ALTER DATABASE documents both on either side, so the
 > schema UNSET list now accepts them too.
 
-## #8362 (data-loading) — commit abac5af
+## #8362 (data-loading) — VÁLIDO, commits abac5af y e031f53
 
-> Addressed: LOAD_MODE and CLUSTER_AT_INGEST_TIME are documented for COPY INTO <table> only,
-> but they had been added to the copy options shared with COPY INTO <location>,
-> CREATE STAGE COPY_OPTIONS and CREATE TABLE. They now live in the COPY INTO <table> statement,
-> and the other three no longer accept them.
+Hallazgo del bot (P2): "LOAD_MODE and CLUSTER_AT_INGEST_TIME are now accepted for
+COPY INTO <location> because that grammar expands the shared option list. Keep these
+table-only options in a table-specific option list instead of adding them to
+CopyOptionsSegment._copy_options_matchables."
+
+> Valid catch, addressed. LOAD_MODE and CLUSTER_AT_INGEST_TIME are documented for
+> COPY INTO <table> only, but they had been added to the copy options shared with
+> COPY INTO <location>, CREATE STAGE COPY_OPTIONS and CREATE TABLE. They now live in the
+> COPY INTO <table> statement and the other three no longer accept them.
+>
+> Reviewing for the same pattern found a second leak, fixed in the follow-up commit:
+> ENDPOINT, AWS_ACCESS_POINT_ARN and USE_PRIVATELINK_ENDPOINT had been added to the stage
+> parameter segments that COPY INTO shares, whose documented external location parameters are
+> only STORAGE_INTEGRATION / CREDENTIALS / ENCRYPTION. The stage statements now reference per
+> cloud grammars that add the stage only parameters on top of the shared ones.
