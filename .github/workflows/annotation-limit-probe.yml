@@ -1,0 +1,33 @@
+name: annotation-limit-probe
+
+on:
+  push:
+    branches: [probe/annotation-limits]
+  workflow_dispatch:
+
+jobs:
+  per_step_caps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: emit-25-errors
+        run: for i in $(seq 1 25); do echo "::error file=README.md,line=$i::probe error $i"; done
+      - name: emit-25-warnings
+        run: for i in $(seq 1 25); do echo "::warning file=README.md,line=$i::probe warning $i"; done
+      - name: emit-25-notices
+        run: for i in $(seq 1 25); do echo "::notice file=README.md,line=$i::probe notice $i"; done
+
+  per_job_cap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: errors-a
+        run: for i in $(seq 1 25); do echo "::error file=README.md,line=$i::A error $i"; done
+      - name: errors-b
+        run: for i in $(seq 1 25); do echo "::error file=README.md,line=$i::B error $i"; done
+      - name: errors-c
+        run: for i in $(seq 1 25); do echo "::error file=README.md,line=$i::C error $i"; done
+      - name: errors-d
+        run: for i in $(seq 1 25); do echo "::error file=README.md,line=$i::D error $i"; done
+      - name: errors-e
+        run: for i in $(seq 1 25); do echo "::error file=README.md,line=$i::E error $i"; done
+      - name: errors-f
+        run: for i in $(seq 1 25); do echo "::error file=README.md,line=$i::F error $i"; done
