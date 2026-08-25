@@ -232,3 +232,34 @@ STORAGE_INTEGRATION/CREDENTIALS/ENCRYPTION seguían dentro del nodo `stage_param
 > GCSStageParameters, AzureBlobStorageStageParameters) that group every parameter in a single
 > node. Only the stage fixtures added by this PR change: the stage only parameters now sit
 > inside the `stage_parameters` node instead of hanging off the statement.
+
+---
+
+# Revisión humana de #8352 (rubytobi) — 6 puntos, todos VÁLIDOS — commit 5b9946f
+
+Respuesta para pegar en la PR:
+
+> Thanks for the thorough review @rubytobi — all six points were fair, and all are addressed
+> in 5b9946f:
+>
+> - **LANGUAGE SQL**: now accepted between the NULL clause and COMMENT, per the docs.
+> - **RETURNS**: only accepts NUMBER now; `RETURNS VARCHAR` no longer parses. The node keeps
+>   the ordinary `data_type` shape so the capitalisation rules still see it.
+> - **Parameters**: the DMF statement gets its own parameter list — one or more named
+>   arguments, each with a `TABLE( ... )` type — so bare scalar parameters are rejected.
+> - **The TABLE( ... ) leak**: the shared `FunctionParameterGrammar` is back to its previous
+>   shape. The `TABLE( ... )` form moves to a dedicated signature parameter list used only
+>   where DMFs are addressed by signature: ALTER FUNCTION, DROP FUNCTION and the GRANT/REVOKE
+>   object reference. ALTER/DROP PROCEDURE, CREATE FUNCTION and CREATE ROW ACCESS POLICY no
+>   longer accept it. One caveat on GRANT: the access statement grammar does not distinguish
+>   FUNCTION from PROCEDURE at the signature position (one shared object-reference rule), so
+>   `GRANT ... ON PROCEDURE p(TABLE(...))` still parses; splitting that would mean
+>   restructuring the whole access statement, which I would rather do as a follow-up if you
+>   think it is worth it.
+> - **GRANT test**: added GRANT and REVOKE fixtures using a `TABLE(NUMBER, NUMBER)` signature.
+> - **OR REPLACE / IF NOT EXISTS**: now mutually exclusive in the grammar itself, matching the
+>   docs (the fixture had been fixed earlier, the grammar had not).
+>
+> Good call on the self-review pass — the later PRs in this series went through one before
+> opening, and this one predates that habit. It caught real issues here, so it is staying in
+> the workflow. Thanks again!
