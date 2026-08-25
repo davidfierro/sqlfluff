@@ -274,3 +274,47 @@ aunque su sintaxis exige TABLE(<col> <tipo>, ...).
 > uses a named-column-only table type, so `TABLE(NUMBER)` no longer parses there, and the
 > signature positions (ALTER / DROP / GRANT) keep accepting the type-only form. No fixture
 > changes: the existing fixtures already used named columns on CREATE.
+
+## #8403, hallazgo del bot sobre la relajación de CHANGES — VÁLIDO el hecho; acotarlo no es viable, se plantean alternativas al mantenedor (sin cambios de código de momento)
+
+Hallazgo (P2, confianza 4/5): hacer opcionales INFORMATION y AT/BEFORE en
+`ChangesClauseSegment` aplica a toda cláusula CHANGES del dialecto, no solo a las dynamic
+tables custom incremental; `CHANGES()` pasa a parsear en cualquier SELECT.
+
+Validación: cierto. La doc de la cláusula estándar exige INFORMATION y declara "The
+AT | BEFORE clause is required"; la de custom incremental permite `CHANGES()` vacío y
+prohíbe los bounds. Acotar la relajación es impracticable: `ChangesClauseSegment` solo se
+alcanza vía `JoinLikeClauseGrammar` (compartida por todo FROM), el cuerpo de la DT es el
+`SelectableGrammar` común y `REFRESH_MODE` vive en el AnySetOf de propiedades — una
+gramática libre de contexto no puede condicionar la forma de CHANGES a esa propiedad, y
+duplicar la cadena de SELECT para cuerpos de DT seguiría recursando al árbol compartido en
+subqueries/CTEs. Decisión: comentario exponiendo alternativas para que el mantenedor asesore.
+
+> The observation is factually right: the relaxation applies to every `CHANGES` clause, so
+> `CHANGES()` (or `CHANGES(INFORMATION => DEFAULT)` without `AT`/`BEFORE`) now parses in any
+> `SELECT`, while outside custom incremental dynamic tables the docs require both
+> `INFORMATION` and `AT | BEFORE`
+> (https://docs.snowflake.com/en/sql-reference/constructs/changes).
+>
+> Scoping the relaxation to dynamic table bodies doesn't look feasible with the current
+> grammar architecture, though. `ChangesClauseSegment` is only reachable through
+> `JoinLikeClauseGrammar`, which is shared by every FROM expression in the dialect, and the
+> body of a dynamic table is a plain `SelectableGrammar` inside `CreateTableStatementSegment`,
+> with `REFRESH_MODE` sitting in an `AnySetOf` of properties elsewhere in the statement — the
+> grammar can't make the shape of `CHANGES` conditional on that property. A dedicated
+> select-grammar variant for dynamic table bodies would mean duplicating the whole chain
+> (`SelectableGrammar` → select statement → FROM clause → from-expression element), and
+> nested subqueries/CTEs would still recurse into the shared tree, so the lenient form would
+> leak back in anyway.
+>
+> Options I can see:
+>
+> 1. Keep the relaxed grammar and make the docstring explicit that the permissiveness is
+>    dialect-wide (parse a documented superset, as the dialect already does in similar
+>    cases), leaving semantic enforcement to a potential lint rule.
+> 2. Drop the `CHANGES` relaxation from this PR (keeping `CUSTOM_INCREMENTAL`,
+>    `BACKFILL FROM` and `START AT`), which keeps the strict clause everywhere but leaves
+>    the documented custom incremental bodies unparsable.
+>
+> I'd lean towards 1 as the smallest change that keeps the feature, but happy to hear how
+> the maintainers would prefer to handle it.
