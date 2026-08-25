@@ -263,3 +263,14 @@ Respuesta para pegar en la PR:
 > Good call on the self-review pass — the later PRs in this series went through one before
 > opening, and this one predates that habit. It caught real issues here, so it is staying in
 > the workflow. Thanks again!
+
+## #8352, hallazgo del bot tras la revisión humana — VÁLIDO, commit del fix el último de la rama
+
+Hallazgo (P3): el TABLE(...) compartido aceptaba datatypes sin nombre también en CREATE,
+aunque su sintaxis exige TABLE(<col> <tipo>, ...).
+
+> Valid catch — the CREATE syntax names every column (`TABLE( <col_arg> <data_type>, ... )`),
+> while the type-only form belongs to the signature positions. The CREATE parameter list now
+> uses a named-column-only table type, so `TABLE(NUMBER)` no longer parses there, and the
+> signature positions (ALTER / DROP / GRANT) keep accepting the type-only form. No fixture
+> changes: the existing fixtures already used named columns on CREATE.
