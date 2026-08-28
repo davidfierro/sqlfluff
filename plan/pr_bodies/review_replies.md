@@ -318,3 +318,30 @@ subqueries/CTEs. Decisión: comentario exponiendo alternativas para que el mante
 >
 > I'd lean towards 1 as the smallest change that keeps the feature, but happy to hear how
 > the maintainers would prefer to handle it.
+
+## #8403, propuesta de peterbud (bounded | unbounded) — IMPLEMENTADA en 149e0a6
+
+peterbud pidió reestructurar `ChangesClauseSegment` como dos alternativas (bounded con
+INFORMATION y AT|BEFORE obligatorios; unbounded sin bounds) para que las mezclas inválidas
+no parseen como cláusula CHANGES, y documentar la unbounded como superset global.
+
+Hecho en 149e0a6: OneOf(bounded, unbounded); las mezclas con END sin bound ya no parsean;
+árboles de los fixtures existentes intactos (cero diffs de regeneración). Matiz verificado
+empíricamente: `CHANGES() AT(...)` sigue parseando porque `Bracketed` del núcleo del parser
+tolera contenido vacío entre brackets en cualquier parse_mode (igual que `FILES = ()`), y
+ese comportamiento es preexistente — parseaba igual en main antes de esta PR. Se explica en
+la respuesta.
+
+> Done in 149e0a6 — the clause is now a `OneOf` of the two alternatives: the bounded form
+> (`INFORMATION` and `AT | BEFORE` required, `END` optional — identical to the previous
+> grammar) and the unbounded form (optional `INFORMATION`, no bounds). Mixed forms like
+> `CHANGES(INFORMATION => DEFAULT) END(...)` or `CHANGES() END(...)` no longer parse, and
+> the docstring now states that the unbounded alternative is accepted globally as a
+> syntactic superset. Existing fixture trees are unchanged (the `OneOf` adds no node), so
+> the regeneration produces no diffs.
+>
+> One honest caveat: `CHANGES() AT(...)` still parses, taking the bounded branch with empty
+> brackets. That comes from the parser core rather than this grammar — `Bracketed` accepts
+> empty bracket content regardless of what the content grammar requires (the same reason
+> `FILES = ()` parses today), and it behaves the same on main before this PR. Preventing it
+> would mean changing `Bracketed` itself, which I'd rather leave out of a dialect PR.
