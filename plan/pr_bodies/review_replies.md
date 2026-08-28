@@ -345,3 +345,25 @@ la respuesta.
 > empty bracket content regardless of what the content grammar requires (the same reason
 > `FILES = ()` parses today), and it behaves the same on main before this PR. Preventing it
 > would mean changing `Bracketed` itself, which I'd rather leave out of a dialect PR.
+
+## #8403, hallazgo del bot tras 149e0a6 — REBATIDO, sin cambios de código
+
+Hallazgo (P2, confianza 3/5): "CHANGES() AT(...) aún parsea: la rama unbounded matchea
+CHANGES() y JoinLikeClauseGrammar consume AT(...) aparte; impedir AT/BEFORE tras la
+unbounded". El síntoma es real (y ya declarado en el hilo), pero el mecanismo es erróneo:
+el árbol verificado muestra el AT DENTRO del changes_clause vía la rama bounded, porque
+Bracketed (núcleo del parser) tolera brackets vacíos con contenido obligatorio (igual que
+FILES = ()). Su remedio no tendría efecto, y el comportamiento es preexistente en main.
+
+> The symptom is the one already flagged in the thread, but the mechanism here isn't what
+> happens, so the suggested guard wouldn't change anything. The actual parse tree shows
+> `CHANGES() AT (...)` matching the **bounded** branch, with the `AT (...)` inside the
+> `changes_clause` node: `Bracketed` in the parser core accepts empty bracket content even
+> when the content grammar requires something (the same reason `FILES = ()` parses), so the
+> bounded alternative treats `()` as its INFORMATION block and then takes the `AT`. The
+> unbounded branch and `JoinLikeClauseGrammar` are not involved, so preventing `AT`/`BEFORE`
+> after an unbounded `CHANGES` would have no effect on this input.
+>
+> It's also pre-existing behavior: the same statement parses identically on current main,
+> before this PR. Making it fail would mean changing `Bracketed` itself, which is out of
+> scope for a dialect PR — as noted in the earlier comment.
