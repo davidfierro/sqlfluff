@@ -3,7 +3,7 @@
 # computed by SQLFluff when running the tests. Please run
 # `python test/generate_parse_fixture_yml.py`  to generate them after adding or
 # altering SQL files.
-_hash: a567627e817150b8ef6781e040e5d9d5f50ac8253c28cdb829b94fb749bc4396
+_hash: b3bb9ee49f67428a9c1a7a7fda517f23910825582d3971e9f14fc35568659083
 file:
 - statement:
     alter_schema_statement:
@@ -433,4 +433,253 @@ file:
     - comma: ','
     - keyword: DCM
     - keyword: PROJECT
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - keyword: IF
+    - keyword: EXISTS
+    - schema_reference:
+        naked_identifier: schema1
+    - keyword: RENAME
+    - keyword: TO
+    - schema_reference:
+        naked_identifier: schema2
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: schema2
+    - keyword: ENABLE
+    - keyword: MANAGED
+    - keyword: ACCESS
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: RENAME
+    - keyword: TO
+    - schema_reference:
+      - naked_identifier: db2
+      - dot: .
+      - naked_identifier: s2
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - keyword: IF
+    - keyword: EXISTS
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: SWAP
+    - keyword: WITH
+    - schema_reference:
+      - naked_identifier: db2
+      - dot: .
+      - naked_identifier: s2
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: DISABLE
+    - keyword: MANAGED
+    - keyword: ACCESS
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - keyword: IF
+    - keyword: EXISTS
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: ENABLE
+    - keyword: MANAGED
+    - keyword: ACCESS
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - keyword: IF
+    - keyword: EXISTS
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: DISABLE
+    - keyword: MANAGED
+    - keyword: ACCESS
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: SET
+    - schema_object_properties:
+        keyword: ICEBERG_MERGE_ON_READ_BEHAVIOR
+        comparison_operator:
+          raw_comparison_operator: '='
+        quoted_literal: "'AUTO'"
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: SET
+    - schema_object_properties:
+        keyword: ICEBERG_MERGE_ON_READ_BEHAVIOR
+        comparison_operator:
+          raw_comparison_operator: '='
+        quoted_literal: "'DISABLED'"
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: SET
+    - schema_object_properties:
+        keyword: ENABLE_ICEBERG_MERGE_ON_READ
+        comparison_operator:
+          raw_comparison_operator: '='
+        boolean_literal: 'FALSE'
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: SET
+    - schema_object_properties:
+        keyword: REPLICABLE_WITH_FAILOVER_GROUPS
+        comparison_operator:
+          raw_comparison_operator: '='
+        quoted_literal: "'NO'"
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: SET
+    - schema_object_properties:
+        keyword: MAX_DATA_EXTENSION_TIME_IN_DAYS
+        comparison_operator:
+          raw_comparison_operator: '='
+        numeric_literal: '7'
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: SET
+    - schema_object_properties:
+      - keyword: DEFAULT_NOTEBOOK_COMPUTE_POOL_CPU
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - quoted_literal: "'cpu_pool'"
+      - keyword: DEFAULT_NOTEBOOK_COMPUTE_POOL_GPU
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - quoted_literal: "'gpu_pool'"
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: SET
+    - schema_object_properties:
+      - keyword: CONTACT
+      - keyword: ACCESS_APPROVAL
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - object_reference:
+          naked_identifier: approver_contact
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: SET
+    - schema_object_properties:
+      - keyword: CONTACT
+      - keyword: STEWARD
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - object_reference:
+          naked_identifier: c1
+      - comma: ','
+      - keyword: SUPPORT
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - object_reference:
+          naked_identifier: c2
+      - comma: ','
+      - keyword: ACCESS_APPROVAL
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - object_reference:
+          naked_identifier: c3
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: UNSET
+    - keyword: CONTACT
+    - keyword: ACCESS_APPROVAL
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - keyword: IF
+    - keyword: EXISTS
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: SET
+    - tag_equals:
+        keyword: TAG
+        tag_reference:
+          naked_identifier: env
+        comparison_operator:
+          raw_comparison_operator: '='
+        quoted_literal: "'dev'"
+- statement_terminator: ;
+- statement:
+    alter_schema_statement:
+    - keyword: ALTER
+    - keyword: SCHEMA
+    - keyword: IF
+    - keyword: EXISTS
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: UNSET
+    - keyword: TAG
+    - tag_reference:
+        naked_identifier: env
 - statement_terminator: ;

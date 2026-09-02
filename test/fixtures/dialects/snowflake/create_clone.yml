@@ -3,7 +3,7 @@
 # computed by SQLFluff when running the tests. Please run
 # `python test/generate_parse_fixture_yml.py`  to generate them after adding or
 # altering SQL files.
-_hash: 0932021c279e3756c989f91dd907f0ba9aff137b2059c4bc7cf68fe33aa634d5
+_hash: 00ecef7eea43c559a08ce36822cf8fdbd684fd24dedf4d2f2e6b525ca4993ae3
 file:
 - statement:
     create_database_statement:
@@ -450,4 +450,366 @@ file:
           end_bracket: )
     - keyword: COPY
     - keyword: GRANTS
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: restored_db
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: my_db
+    - from_at_expression:
+        keyword: AT
+        bracketed:
+          start_bracket: (
+          keyword: TIMESTAMP
+          parameter_assigner: =>
+          expression:
+            cast_expression:
+              function:
+                function_name:
+                  function_name_identifier: DATEADD
+                function_contents:
+                  bracketed:
+                  - start_bracket: (
+                  - date_part: days
+                  - comma: ','
+                  - expression:
+                      numeric_literal:
+                        sign_indicator: '-'
+                        numeric_literal: '4'
+                  - comma: ','
+                  - expression:
+                      bare_function: current_timestamp
+                  - end_bracket: )
+              casting_operator: '::'
+              data_type:
+                data_type_identifier: timestamp_tz
+          end_bracket: )
+    - keyword: IGNORE
+    - keyword: TABLES
+    - keyword: WITH
+    - keyword: INSUFFICIENT
+    - keyword: DATA
+    - keyword: RETENTION
+- statement_terminator: ;
+- statement:
+    create_schema_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: REPLACE
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: clone_ht_schema
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: ht_schema
+    - keyword: IGNORE
+    - keyword: HYBRID
+    - keyword: TABLES
+- statement_terminator: ;
+- statement:
+    create_schema_statement:
+    - keyword: CREATE
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: S2
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: S1
+    - from_at_expression:
+        keyword: AT
+        bracketed:
+          start_bracket: (
+          keyword: TIMESTAMP
+          parameter_assigner: =>
+          expression:
+            quoted_literal: "'2025-04-01 12:00:00'"
+          end_bracket: )
+- statement_terminator: ;
+- statement:
+    create_schema_statement:
+    - keyword: CREATE
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: S3
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: S1
+- statement_terminator: ;
+- statement:
+    create_schema_statement:
+    - keyword: CREATE
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: source_clone
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: source
+- statement_terminator: ;
+- statement:
+    create_table_statement:
+    - keyword: CREATE
+    - keyword: TABLE
+    - keyword: IF
+    - keyword: NOT
+    - keyword: EXISTS
+    - table_reference:
+        naked_identifier: orders_clone
+    - keyword: CLONE
+    - table_reference:
+        naked_identifier: orders
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: REPLACE
+    - keyword: TABLE
+    - object_reference:
+        naked_identifier: orders_clone
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: orders
+    - from_before_expression:
+        keyword: BEFORE
+        bracketed:
+          start_bracket: (
+          keyword: OFFSET
+          parameter_assigner: =>
+          expression:
+            numeric_literal:
+              sign_indicator: '-'
+              numeric_literal: '3600'
+          end_bracket: )
+- statement_terminator: ;
+- statement:
+    create_table_statement:
+    - keyword: CREATE
+    - keyword: DYNAMIC
+    - keyword: TABLE
+    - table_reference:
+        naked_identifier: dt_clone
+    - keyword: CLONE
+    - table_reference:
+        naked_identifier: dt_source
+- statement_terminator: ;
+- statement:
+    create_table_statement:
+    - keyword: CREATE
+    - keyword: DYNAMIC
+    - keyword: TABLE
+    - table_reference:
+        naked_identifier: dt_clone
+    - keyword: CLONE
+    - table_reference:
+        naked_identifier: dt_source
+    - dynamic_table_options:
+      - keyword: TARGET_LAG
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - keyword: DOWNSTREAM
+      - keyword: WAREHOUSE
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - object_reference:
+          naked_identifier: my_wh
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: REPLACE
+    - keyword: DYNAMIC
+    - keyword: TABLE
+    - object_reference:
+        naked_identifier: dt_clone
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: dt_source
+    - from_before_expression:
+        keyword: BEFORE
+        bracketed:
+          start_bracket: (
+          keyword: OFFSET
+          parameter_assigner: =>
+          expression:
+            numeric_literal:
+              sign_indicator: '-'
+              numeric_literal: '3600'
+          end_bracket: )
+    - dynamic_table_options:
+      - keyword: TARGET_LAG
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - dynamic_table_lag_interval_segment: "'20 minutes'"
+      - keyword: WAREHOUSE
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - object_reference:
+          naked_identifier: my_wh
+- statement_terminator: ;
+- statement:
+    create_table_statement:
+    - keyword: CREATE
+    - keyword: ICEBERG
+    - keyword: TABLE
+    - table_reference:
+        naked_identifier: iceberg_clone
+    - keyword: CLONE
+    - table_reference:
+        naked_identifier: iceberg_source
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: REPLACE
+    - keyword: ICEBERG
+    - keyword: TABLE
+    - object_reference:
+        naked_identifier: iceberg_clone
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: iceberg_source
+    - from_at_expression:
+        keyword: AT
+        bracketed:
+          start_bracket: (
+          keyword: OFFSET
+          parameter_assigner: =>
+          expression:
+            numeric_literal:
+              sign_indicator: '-'
+              numeric_literal: '3600'
+          end_bracket: )
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: FILE
+    - keyword: FORMAT
+    - object_reference:
+        naked_identifier: ff_clone
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: ff_source
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: REPLACE
+    - keyword: FILE
+    - keyword: FORMAT
+    - keyword: IF
+    - keyword: NOT
+    - keyword: EXISTS
+    - object_reference:
+        naked_identifier: ff_clone
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: ff_source
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: SEQUENCE
+    - object_reference:
+        naked_identifier: seq_clone
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: seq_source
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: REPLACE
+    - keyword: SEQUENCE
+    - keyword: IF
+    - keyword: NOT
+    - keyword: EXISTS
+    - object_reference:
+        naked_identifier: seq_clone
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: seq_source
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: STAGE
+    - object_reference:
+        naked_identifier: stage_clone
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: stage_source
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: REPLACE
+    - keyword: STAGE
+    - keyword: IF
+    - keyword: NOT
+    - keyword: EXISTS
+    - object_reference:
+        naked_identifier: stage_clone
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: stage_source
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: STREAM
+    - object_reference:
+        naked_identifier: stream_clone
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: stream_source
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: REPLACE
+    - keyword: STREAM
+    - keyword: IF
+    - keyword: NOT
+    - keyword: EXISTS
+    - object_reference:
+        naked_identifier: stream_clone
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: stream_source
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: TASK
+    - object_reference:
+        naked_identifier: task_clone
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: task_source
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: REPLACE
+    - keyword: TASK
+    - keyword: IF
+    - keyword: NOT
+    - keyword: EXISTS
+    - object_reference:
+        naked_identifier: task_clone
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: task_source
 - statement_terminator: ;

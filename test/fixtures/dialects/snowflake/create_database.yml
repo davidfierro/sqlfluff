@@ -3,7 +3,7 @@
 # computed by SQLFluff when running the tests. Please run
 # `python test/generate_parse_fixture_yml.py`  to generate them after adding or
 # altering SQL files.
-_hash: 8145c83ac73d0ebb1db7295a5bf0fd9576b3c4ee003fd1fe847cf16e753b9790
+_hash: 02cebcd609f68f989ba9ceb889bfa0f3bcacaa54aace701903627ff33e86b806
 file:
 - statement:
     create_database_statement:
@@ -762,4 +762,339 @@ file:
         raw_comparison_operator: '='
     - udf_body: "$$\norganization_targets:\n  - all_accounts_including_external\n\
         $$"
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: mytestdb
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: mytestdb2
+    - keyword: DATA_RETENTION_TIME_IN_DAYS
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - numeric_literal: '10'
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: TRANSIENT
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: mytransientdb
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: snow_sales
+    - keyword: FROM
+    - keyword: SHARE
+    - object_reference:
+      - naked_identifier: ab67890
+      - dot: .
+      - naked_identifier: sales_s
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: ALTER
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: db1
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: ALTER
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: db1
+    - keyword: DATA_RETENTION_TIME_IN_DAYS
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - numeric_literal: '5'
+    - keyword: DEFAULT_DDL_COLLATION
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - quoted_literal: "'de'"
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: ALTER
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: db1
+    - keyword: DEFAULT_DDL_COLLATION
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - quoted_literal: "'de'"
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: ALTER
+    - keyword: TRANSIENT
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: MY_DATABASE
+    - keyword: DATA_RETENTION_TIME_IN_DAYS
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - numeric_literal: '1'
+    - keyword: MAX_DATA_EXTENSION_TIME_IN_DAYS
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - numeric_literal: '14'
+    - keyword: EXTERNAL_VOLUME
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - quoted_literal: "'my_ext_volume'"
+    - keyword: CATALOG
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - quoted_literal: "'my_catalog_integration'"
+    - keyword: ICEBERG_DEFAULT_DDL_COLLATION
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - quoted_literal: "'en-ci'"
+    - keyword: ICEBERG_VERSION_DEFAULT
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - numeric_literal: '2'
+    - keyword: ICEBERG_MERGE_ON_READ_BEHAVIOR
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - quoted_literal: "'ENABLED'"
+    - keyword: ENABLE_ICEBERG_MERGE_ON_READ
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - boolean_literal: 'FALSE'
+    - keyword: REPLACE_INVALID_CHARACTERS
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - boolean_literal: 'FALSE'
+    - keyword: DEFAULT_DDL_COLLATION
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - quoted_literal: "'en-ci'"
+    - log_level_equals:
+        keyword: LOG_LEVEL
+        comparison_operator:
+          raw_comparison_operator: '='
+        quoted_literal: "'INFO'"
+    - metric_level_equals:
+        keyword: METRIC_LEVEL
+        comparison_operator:
+          raw_comparison_operator: '='
+        quoted_literal: "'ALL'"
+    - trace_level_equals:
+        keyword: TRACE_LEVEL
+        comparison_operator:
+          raw_comparison_operator: '='
+        quoted_literal: "'ALWAYS'"
+    - keyword: STORAGE_SERIALIZATION_POLICY
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - keyword: OPTIMIZED
+    - comment_equals_clause:
+        keyword: COMMENT
+        comparison_operator:
+          raw_comparison_operator: '='
+        quoted_literal: "'create or alter'"
+    - keyword: OBJECT_VISIBILITY
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - keyword: PRIVILEGED
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: MY_DATABASE
+    - tag_bracketed_equals:
+        keyword: TAG
+        bracketed:
+        - start_bracket: (
+        - tag_reference:
+            naked_identifier: env
+        - comparison_operator:
+            raw_comparison_operator: '='
+        - quoted_literal: "'production'"
+        - comma: ','
+        - tag_reference:
+            naked_identifier: team
+        - comparison_operator:
+            raw_comparison_operator: '='
+        - quoted_literal: "'data'"
+        - end_bracket: )
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: MY_DATABASE
+    - keyword: CATALOG_SYNC
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - quoted_literal: "'my_open_catalog_integration'"
+    - keyword: CATALOG_SYNC_NAMESPACE_MODE
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - keyword: NEST
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: MY_DATABASE
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: source_db
+    - from_before_expression:
+        keyword: BEFORE
+        bracketed:
+          start_bracket: (
+          keyword: TIMESTAMP
+          parameter_assigner: =>
+          expression:
+            cast_expression:
+              quoted_literal: "'2025-01-01 00:00:00'"
+              casting_operator: '::'
+              data_type:
+                data_type_identifier: TIMESTAMP_TZ
+          end_bracket: )
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: MY_DATABASE
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: source_db
+    - from_before_expression:
+        keyword: BEFORE
+        bracketed:
+          start_bracket: (
+          keyword: OFFSET
+          parameter_assigner: =>
+          expression:
+            numeric_literal:
+              sign_indicator: '-'
+              numeric_literal: '3600'
+          end_bracket: )
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: MY_DATABASE
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: source_db
+    - from_at_expression:
+        keyword: AT
+        bracketed:
+          start_bracket: (
+          keyword: STATEMENT
+          parameter_assigner: =>
+          expression:
+            quoted_literal: "'01b71944-0001-b181-0000-0129032279f6'"
+          end_bracket: )
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: REPLACE
+    - keyword: TRANSIENT
+    - keyword: DATABASE
+    - keyword: IF
+    - keyword: NOT
+    - keyword: EXISTS
+    - database_reference:
+        naked_identifier: MY_DATABASE
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: source_db
+    - from_at_expression:
+        keyword: AT
+        bracketed:
+          start_bracket: (
+          keyword: OFFSET
+          parameter_assigner: =>
+          expression:
+            numeric_literal:
+              sign_indicator: '-'
+              numeric_literal: '3600'
+          end_bracket: )
+    - keyword: IGNORE
+    - keyword: TABLES
+    - keyword: WITH
+    - keyword: INSUFFICIENT
+    - keyword: DATA
+    - keyword: RETENTION
+    - keyword: IGNORE
+    - keyword: HYBRID
+    - keyword: TABLES
+    - keyword: DATA_RETENTION_TIME_IN_DAYS
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - numeric_literal: '1'
+    - comment_equals_clause:
+        keyword: COMMENT
+        comparison_operator:
+          raw_comparison_operator: '='
+        quoted_literal: "'cloned'"
+    - tag_bracketed_equals:
+      - keyword: WITH
+      - keyword: TAG
+      - bracketed:
+          start_bracket: (
+          tag_reference:
+            naked_identifier: env
+          comparison_operator:
+            raw_comparison_operator: '='
+          quoted_literal: "'dev'"
+          end_bracket: )
+    - keyword: WITH
+    - keyword: CONTACT
+    - bracketed:
+      - start_bracket: (
+      - keyword: STEWARD
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - object_reference:
+          naked_identifier: c1
+      - comma: ','
+      - keyword: SUPPORT
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - object_reference:
+          naked_identifier: c2
+      - comma: ','
+      - keyword: ACCESS_APPROVAL
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - object_reference:
+          naked_identifier: c3
+      - end_bracket: )
 - statement_terminator: ;

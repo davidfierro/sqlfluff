@@ -118,6 +118,62 @@ def _violations(sql: str) -> list:
             "CREATE TRANSIENT STAGE x CLONE y;",
             id="transient_stage_clone",
         ),
+        pytest.param(
+            "CREATE TRANSIENT EVENT TABLE x CLONE y;",
+            id="transient_event_table_clone",
+        ),
+        pytest.param(
+            "CREATE TRANSIENT ALERT x CLONE y;",
+            id="transient_alert_clone",
+        ),
+        # The IGNORE ... and INCLUDE INTERNAL STAGES clauses are documented
+        # for database and schema clones only.
+        pytest.param(
+            "CREATE TABLE t1 CLONE t0 IGNORE HYBRID TABLES;",
+            id="table_clone_ignore_hybrid_tables",
+        ),
+        pytest.param(
+            "CREATE TABLE t1 CLONE t0 INCLUDE INTERNAL STAGES;",
+            id="table_clone_include_internal_stages",
+        ),
+        # WITH MANAGED ACCESS is a schema clause.
+        pytest.param(
+            "CREATE DATABASE d1 CLONE d0 WITH MANAGED ACCESS;",
+            id="database_clone_with_managed_access",
+        ),
+        # FROM BACKUP SET is a standalone form.
+        pytest.param(
+            "CREATE SCHEMA s1 FROM BACKUP SET bs IDENTIFIER 'x' CLONE s0;",
+            id="schema_from_backup_set_with_clone",
+        ),
+        # SET FEATURE POLICY needs a policy name; UNSET takes none.
+        pytest.param(
+            "ALTER DATABASE d1 SET FEATURE POLICY;",
+            id="alter_database_set_feature_policy_without_name",
+        ),
+        pytest.param(
+            "ALTER DATABASE d1 UNSET FEATURE POLICY p1;",
+            id="alter_database_unset_feature_policy_with_name",
+        ),
+        # A database role clone takes no COMMENT.
+        pytest.param(
+            "CREATE DATABASE ROLE r1 CLONE r0 COMMENT = 'x';",
+            id="database_role_clone_with_comment",
+        ),
+        # DEFAULT_METADATA_WRITE_FORMAT: CREATE only, and only the two
+        # documented values.
+        pytest.param(
+            "CREATE SCHEMA s1 DEFAULT_METADATA_WRITE_FORMAT = PARQUET;",
+            id="create_schema_default_metadata_write_format_bad_value",
+        ),
+        pytest.param(
+            "ALTER SCHEMA s1 SET DEFAULT_METADATA_WRITE_FORMAT = ICEBERG;",
+            id="alter_schema_default_metadata_write_format",
+        ),
+        pytest.param(
+            "ALTER DATABASE d1 SET DEFAULT_METADATA_WRITE_FORMAT = ICEBERG;",
+            id="alter_database_default_metadata_write_format",
+        ),
     ],
 )
 def test_snowflake_rejects_undocumented_forms(sql):

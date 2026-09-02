@@ -61,3 +61,34 @@ CREATE OR REPLACE DYNAMIC TABLE dt_clone CLONE dt_source
 CREATE OR REPLACE ICEBERG TABLE IF NOT EXISTS iceberg_clone CLONE iceberg_source
   BEFORE (STATEMENT => '8e5d0ca9-005e-44e6-b858-a8f5b37c5726')
   COPY GRANTS;
+
+-- docs create-clone examples (verbatim)
+CREATE DATABASE restored_db CLONE my_db
+  AT (TIMESTAMP => DATEADD(days, -4, current_timestamp)::timestamp_tz)
+  IGNORE TABLES WITH INSUFFICIENT DATA RETENTION;
+CREATE OR REPLACE SCHEMA clone_ht_schema CLONE ht_schema
+  IGNORE HYBRID TABLES;
+CREATE SCHEMA S2 CLONE S1 AT(TIMESTAMP => '2025-04-01 12:00:00');
+CREATE SCHEMA S3 CLONE S1;
+CREATE SCHEMA source_clone CLONE source;
+
+-- docs create-clone: tables, dynamic tables and Iceberg tables
+CREATE TABLE IF NOT EXISTS orders_clone CLONE orders;
+CREATE OR REPLACE TABLE orders_clone CLONE orders BEFORE (OFFSET => -3600);
+CREATE DYNAMIC TABLE dt_clone CLONE dt_source;
+CREATE DYNAMIC TABLE dt_clone CLONE dt_source TARGET_LAG = DOWNSTREAM WAREHOUSE = my_wh;
+CREATE OR REPLACE DYNAMIC TABLE dt_clone CLONE dt_source BEFORE (OFFSET => -3600) TARGET_LAG = '20 minutes' WAREHOUSE = my_wh;
+CREATE ICEBERG TABLE iceberg_clone CLONE iceberg_source;
+CREATE OR REPLACE ICEBERG TABLE iceberg_clone CLONE iceberg_source AT (OFFSET => -3600);
+
+-- docs create-clone: { ALERT | FILE FORMAT | SEQUENCE | STAGE | STREAM | TASK }
+CREATE FILE FORMAT ff_clone CLONE ff_source;
+CREATE OR REPLACE FILE FORMAT IF NOT EXISTS ff_clone CLONE ff_source;
+CREATE SEQUENCE seq_clone CLONE seq_source;
+CREATE OR REPLACE SEQUENCE IF NOT EXISTS seq_clone CLONE seq_source;
+CREATE STAGE stage_clone CLONE stage_source;
+CREATE OR REPLACE STAGE IF NOT EXISTS stage_clone CLONE stage_source;
+CREATE STREAM stream_clone CLONE stream_source;
+CREATE OR REPLACE STREAM IF NOT EXISTS stream_clone CLONE stream_source;
+CREATE TASK task_clone CLONE task_source;
+CREATE OR REPLACE TASK IF NOT EXISTS task_clone CLONE task_source;
