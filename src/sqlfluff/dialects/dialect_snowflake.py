@@ -11070,6 +11070,17 @@ class AlterDatabaseSegment(BaseSegment):
             Sequence("SET", Ref("TagEqualsSegment")),
             # ALTER DATABASE <name> UNSET TAG <tag_name> [ , <tag_name> ... ]
             Sequence("UNSET", "TAG", Delimited(Ref("TagReferenceSegment"))),
+            # ALTER DATABASE [ IF EXISTS ] <name>
+            # SET FEATURE POLICY <policy_name> [ FORCE ]
+            Sequence(
+                "SET",
+                "FEATURE",
+                "POLICY",
+                Ref("ObjectReferenceSegment"),
+                Ref.keyword("FORCE", optional=True),
+            ),
+            # ALTER DATABASE [ IF EXISTS ] <name> UNSET FEATURE POLICY
+            Sequence("UNSET", "FEATURE", "POLICY"),
         ),
     )
 

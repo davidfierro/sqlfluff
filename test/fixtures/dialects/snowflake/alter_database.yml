@@ -3,7 +3,7 @@
 # computed by SQLFluff when running the tests. Please run
 # `python test/generate_parse_fixture_yml.py`  to generate them after adding or
 # altering SQL files.
-_hash: 5ac133ee50c4fc5774d46a3b80e7d6c5b85dd0ae79b30e2cba6d6cbc62e3b692
+_hash: 30992b09997cd45324ef9da0937cb01fdb11529075700085fcdcbb93751864df
 file:
 - statement:
     alter_database_statement:
@@ -939,4 +939,57 @@ file:
     - keyword: UNSET
     - keyword: DCM
     - keyword: PROJECT
+- statement_terminator: ;
+- statement:
+    alter_database_statement:
+    - keyword: ALTER
+    - keyword: DATABASE
+    - object_reference:
+        naked_identifier: db1
+    - keyword: SET
+    - keyword: FEATURE
+    - keyword: POLICY
+    - object_reference:
+        naked_identifier: my_feature_policy
+- statement_terminator: ;
+- statement:
+    alter_database_statement:
+    - keyword: ALTER
+    - keyword: DATABASE
+    - keyword: IF
+    - keyword: EXISTS
+    - object_reference:
+        naked_identifier: db1
+    - keyword: SET
+    - keyword: FEATURE
+    - keyword: POLICY
+    - object_reference:
+      - naked_identifier: governance
+      - dot: .
+      - naked_identifier: policies
+      - dot: .
+      - naked_identifier: my_feature_policy
+    - keyword: FORCE
+- statement_terminator: ;
+- statement:
+    alter_database_statement:
+    - keyword: ALTER
+    - keyword: DATABASE
+    - object_reference:
+        naked_identifier: db1
+    - keyword: UNSET
+    - keyword: FEATURE
+    - keyword: POLICY
+- statement_terminator: ;
+- statement:
+    alter_database_statement:
+    - keyword: ALTER
+    - keyword: DATABASE
+    - keyword: IF
+    - keyword: EXISTS
+    - object_reference:
+        naked_identifier: db1
+    - keyword: UNSET
+    - keyword: FEATURE
+    - keyword: POLICY
 - statement_terminator: ;
