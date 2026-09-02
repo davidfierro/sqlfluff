@@ -101,3 +101,18 @@ CREATE DATABASE iceberg_db
 -- docs create-database parameters: DEFAULT_METADATA_WRITE_FORMAT = { SNOWFLAKE | ICEBERG }
 CREATE DATABASE MY_DATABASE DEFAULT_METADATA_WRITE_FORMAT = SNOWFLAKE;
 CREATE DATABASE MY_DATABASE CATALOG = 'SNOWFLAKE' DEFAULT_METADATA_WRITE_FORMAT = ICEBERG;
+
+-- docs create-database syntax block order: the visibility, compaction and OAuth
+-- parameters follow [ [ WITH ] TAG ( ... ) ] [ WITH CONTACT ( ... ) ]
+CREATE DATABASE MY_DATABASE
+    COMMENT = 'x'
+    WITH TAG (env = 'dev')
+    WITH CONTACT (STEWARD = c1)
+    OBJECT_VISIBILITY = PRIVILEGED
+    ENABLE_DATA_COMPACTION = TRUE
+    OAUTH_AUTHORIZATION_SERVER = my_external_oauth
+    OAUTH_SCOPES_SUPPORTED = 'session:role:all';
+CREATE DATABASE MY_DATABASE WITH CONTACT (SUPPORT = c2) OBJECT_VISIBILITY = $$
+organization_targets:
+  - all_accounts_including_external
+$$;

@@ -4104,6 +4104,31 @@ class CreateDatabaseStatementSegment(ansi.CreateDatabaseStatementSegment):
     """
 
     type = "create_database_statement"
+    # The syntax block lists these after WITH CONTACT ( ... ), while the
+    # CREATE OR ALTER form lists them with the other parameters, so they are
+    # accepted in both positions.
+    _visibility_and_oauth_options = [
+        Sequence(
+            "OBJECT_VISIBILITY",
+            Ref("EqualsSegment"),
+            OneOf("PRIVILEGED", Ref("DollarQuotedUDFBody")),
+        ),
+        Sequence(
+            "ENABLE_DATA_COMPACTION",
+            Ref("EqualsSegment"),
+            Ref("BooleanLiteralGrammar"),
+        ),
+        Sequence(
+            "OAUTH_AUTHORIZATION_SERVER",
+            Ref("EqualsSegment"),
+            Ref("ObjectReferenceSegment"),
+        ),
+        Sequence(
+            "OAUTH_SCOPES_SUPPORTED",
+            Ref("EqualsSegment"),
+            Ref("QuotedLiteralSegment"),
+        ),
+    ]
     match_grammar = Sequence(
         "CREATE",
         Ref("AlterOrReplaceGrammar", optional=True),
@@ -4228,30 +4253,12 @@ class CreateDatabaseStatementSegment(ansi.CreateDatabaseStatementSegment):
                     Ref("LogLevelEqualsSegment"),
                     Ref("MetricLevelEqualsSegment"),
                     Ref("TraceLevelEqualsSegment"),
-                    Sequence(
-                        "OBJECT_VISIBILITY",
-                        Ref("EqualsSegment"),
-                        OneOf("PRIVILEGED", Ref("DollarQuotedUDFBody")),
-                    ),
-                    Sequence(
-                        "ENABLE_DATA_COMPACTION",
-                        Ref("EqualsSegment"),
-                        Ref("BooleanLiteralGrammar"),
-                    ),
-                    Sequence(
-                        "OAUTH_AUTHORIZATION_SERVER",
-                        Ref("EqualsSegment"),
-                        Ref("ObjectReferenceSegment"),
-                    ),
-                    Sequence(
-                        "OAUTH_SCOPES_SUPPORTED",
-                        Ref("EqualsSegment"),
-                        Ref("QuotedLiteralSegment"),
-                    ),
+                    *_visibility_and_oauth_options,
                     optional=True,
                 ),
                 Ref("TagBracketedEqualsSegment", optional=True),
                 Ref("ContactBracketedGrammar", optional=True),
+                AnySetOf(*_visibility_and_oauth_options, optional=True),
             ),
             optional=True,
         ),

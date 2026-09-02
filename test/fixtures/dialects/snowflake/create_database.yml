@@ -3,7 +3,7 @@
 # computed by SQLFluff when running the tests. Please run
 # `python test/generate_parse_fixture_yml.py`  to generate them after adding or
 # altering SQL files.
-_hash: 42158f68a87e8890216e73a2113e365a2c693b30c433c861ac195a7db295b4a9
+_hash: 8145c83ac73d0ebb1db7295a5bf0fd9576b3c4ee003fd1fe847cf16e753b9790
 file:
 - statement:
     create_database_statement:
@@ -690,4 +690,76 @@ file:
     - comparison_operator:
         raw_comparison_operator: '='
     - keyword: ICEBERG
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: MY_DATABASE
+    - comment_equals_clause:
+        keyword: COMMENT
+        comparison_operator:
+          raw_comparison_operator: '='
+        quoted_literal: "'x'"
+    - tag_bracketed_equals:
+      - keyword: WITH
+      - keyword: TAG
+      - bracketed:
+          start_bracket: (
+          tag_reference:
+            naked_identifier: env
+          comparison_operator:
+            raw_comparison_operator: '='
+          quoted_literal: "'dev'"
+          end_bracket: )
+    - keyword: WITH
+    - keyword: CONTACT
+    - bracketed:
+        start_bracket: (
+        keyword: STEWARD
+        comparison_operator:
+          raw_comparison_operator: '='
+        object_reference:
+          naked_identifier: c1
+        end_bracket: )
+    - keyword: OBJECT_VISIBILITY
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - keyword: PRIVILEGED
+    - keyword: ENABLE_DATA_COMPACTION
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - boolean_literal: 'TRUE'
+    - keyword: OAUTH_AUTHORIZATION_SERVER
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - object_reference:
+        naked_identifier: my_external_oauth
+    - keyword: OAUTH_SCOPES_SUPPORTED
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - quoted_literal: "'session:role:all'"
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: MY_DATABASE
+    - keyword: WITH
+    - keyword: CONTACT
+    - bracketed:
+        start_bracket: (
+        keyword: SUPPORT
+        comparison_operator:
+          raw_comparison_operator: '='
+        object_reference:
+          naked_identifier: c2
+        end_bracket: )
+    - keyword: OBJECT_VISIBILITY
+    - comparison_operator:
+        raw_comparison_operator: '='
+    - udf_body: "$$\norganization_targets:\n  - all_accounts_including_external\n\
+        $$"
 - statement_terminator: ;
