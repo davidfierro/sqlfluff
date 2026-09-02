@@ -4244,20 +4244,7 @@ class CreateDatabaseStatementSegment(ansi.CreateDatabaseStatementSegment):
                     optional=True,
                 ),
                 Ref("TagBracketedEqualsSegment", optional=True),
-                Sequence(
-                    "WITH",
-                    "CONTACT",
-                    Bracketed(
-                        Delimited(
-                            Sequence(
-                                Ref("PurposeGrammar"),
-                                Ref("EqualsSegment"),
-                                Ref("ObjectReferenceSegment"),
-                            )
-                        )
-                    ),
-                    optional=True,
-                ),
+                Ref("ContactBracketedGrammar", optional=True),
             ),
             optional=True,
         ),
