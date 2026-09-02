@@ -24,3 +24,19 @@ CREATE SCHEMA iceberg_schema
     ENABLE_DATA_COMPACTION = TRUE
     OAUTH_AUTHORIZATION_SERVER = my_external_oauth_integration
     OAUTH_SCOPES_SUPPORTED = 'read,write';
+
+-- docs create-schema: CLONE followed by the remaining clauses
+--   [ CLONE <source_schema> [ { AT | BEFORE } ( ... ) ] [ IGNORE ... ] ]
+--   [ WITH MANAGED ACCESS ] [ <params> ] [ [ WITH ] TAG ( ... ) ] [ WITH CONTACT ( ... ) ]
+CREATE SCHEMA s1 CLONE s0 WITH MANAGED ACCESS DATA_RETENTION_TIME_IN_DAYS = 1;
+CREATE OR REPLACE TRANSIENT SCHEMA IF NOT EXISTS s1 CLONE s0
+    AT (OFFSET => -60)
+    IGNORE TABLES WITH INSUFFICIENT DATA RETENTION
+    IGNORE HYBRID TABLES
+    WITH MANAGED ACCESS
+    DATA_RETENTION_TIME_IN_DAYS = 1
+    COMMENT = 'cloned'
+    WITH TAG (env = 'dev')
+    WITH CONTACT (STEWARD = c1);
+-- docs create-schema: CREATE SCHEMA <name> FROM BACKUP SET <backup_set> IDENTIFIER '<backup_id>'
+CREATE SCHEMA s1 FROM BACKUP SET my_backup_set IDENTIFIER 'backup_id_1';

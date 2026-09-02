@@ -3,7 +3,7 @@
 # computed by SQLFluff when running the tests. Please run
 # `python test/generate_parse_fixture_yml.py`  to generate them after adding or
 # altering SQL files.
-_hash: d6e4a67dfb641ede80e311e6018d39131665d730c4708ba903429dc95c87e92b
+_hash: da7f46226d3946f18e47d4088d6962a88f798ae56f4b07d9ce1be58a1130f57e
 file:
 - statement:
     create_database_statement:
@@ -16,10 +16,10 @@ file:
         naked_identifier: mytestdb
 - statement_terminator: ;
 - statement:
-    create_clone_statement:
+    create_schema_statement:
     - keyword: CREATE
     - keyword: SCHEMA
-    - object_reference:
+    - schema_reference:
         naked_identifier: mytestschema_clone
     - keyword: CLONE
     - object_reference:
@@ -36,10 +36,10 @@ file:
         naked_identifier: orders
 - statement_terminator: ;
 - statement:
-    create_clone_statement:
+    create_schema_statement:
     - keyword: CREATE
     - keyword: SCHEMA
-    - object_reference:
+    - schema_reference:
         naked_identifier: mytestschema_clone_restore
     - keyword: CLONE
     - object_reference:
@@ -116,21 +116,21 @@ file:
           end_bracket: )
 - statement_terminator: ;
 - statement:
-    create_clone_statement:
+    create_schema_statement:
     - keyword: CREATE
     - keyword: TRANSIENT
     - keyword: SCHEMA
-    - object_reference:
+    - schema_reference:
         naked_identifier: clone_schema
     - keyword: CLONE
     - object_reference:
         naked_identifier: source_schema
 - statement_terminator: ;
 - statement:
-    create_clone_statement:
+    create_schema_statement:
     - keyword: CREATE
     - keyword: SCHEMA
-    - object_reference:
+    - schema_reference:
         naked_identifier: clone_schema
     - keyword: CLONE
     - object_reference:

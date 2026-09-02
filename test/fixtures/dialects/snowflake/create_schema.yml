@@ -3,23 +3,23 @@
 # computed by SQLFluff when running the tests. Please run
 # `python test/generate_parse_fixture_yml.py`  to generate them after adding or
 # altering SQL files.
-_hash: b9d704091bbf2f448247cf069e0cdb81aa4d0873e4abaf6506c1a535d3ae9a06
+_hash: e1d5e0b28a08ed91f68a8a4a049482ad6e63b58ab9344f2ccc691a4e365bd1aa
 file:
 - statement:
-    create_clone_statement:
+    create_schema_statement:
     - keyword: create
     - keyword: schema
-    - object_reference:
+    - schema_reference:
         naked_identifier: mytestschema_clone_restore
     - keyword: clone
     - object_reference:
         naked_identifier: testschema
 - statement_terminator: ;
 - statement:
-    create_clone_statement:
+    create_schema_statement:
     - keyword: create
     - keyword: schema
-    - object_reference:
+    - schema_reference:
       - naked_identifier: mytestdatabase1
       - dot: .
       - naked_identifier: mytestschema_clone_restore
@@ -30,10 +30,10 @@ file:
       - naked_identifier: testschema
 - statement_terminator: ;
 - statement:
-    create_clone_statement:
+    create_schema_statement:
     - keyword: create
     - keyword: schema
-    - object_reference:
+    - schema_reference:
         naked_identifier: mytestschema_clone_restore
     - keyword: clone
     - object_reference:
@@ -274,4 +274,106 @@ file:
       - comparison_operator:
           raw_comparison_operator: '='
       - quoted_literal: "'read,write'"
+- statement_terminator: ;
+- statement:
+    create_schema_statement:
+    - keyword: CREATE
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: s0
+    - keyword: WITH
+    - keyword: MANAGED
+    - keyword: ACCESS
+    - schema_object_properties:
+        keyword: DATA_RETENTION_TIME_IN_DAYS
+        comparison_operator:
+          raw_comparison_operator: '='
+        numeric_literal: '1'
+- statement_terminator: ;
+- statement:
+    create_schema_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: REPLACE
+    - keyword: TRANSIENT
+    - keyword: SCHEMA
+    - keyword: IF
+    - keyword: NOT
+    - keyword: EXISTS
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: s0
+    - from_at_expression:
+        keyword: AT
+        bracketed:
+          start_bracket: (
+          keyword: OFFSET
+          parameter_assigner: =>
+          expression:
+            numeric_literal:
+              sign_indicator: '-'
+              numeric_literal: '60'
+          end_bracket: )
+    - keyword: IGNORE
+    - keyword: TABLES
+    - keyword: WITH
+    - keyword: INSUFFICIENT
+    - keyword: DATA
+    - keyword: RETENTION
+    - keyword: IGNORE
+    - keyword: HYBRID
+    - keyword: TABLES
+    - keyword: WITH
+    - keyword: MANAGED
+    - keyword: ACCESS
+    - schema_object_properties:
+        keyword: DATA_RETENTION_TIME_IN_DAYS
+        comparison_operator:
+          raw_comparison_operator: '='
+        numeric_literal: '1'
+        comment_equals_clause:
+          keyword: COMMENT
+          comparison_operator:
+            raw_comparison_operator: '='
+          quoted_literal: "'cloned'"
+    - tag_bracketed_equals:
+      - keyword: WITH
+      - keyword: TAG
+      - bracketed:
+          start_bracket: (
+          tag_reference:
+            naked_identifier: env
+          comparison_operator:
+            raw_comparison_operator: '='
+          quoted_literal: "'dev'"
+          end_bracket: )
+    - keyword: WITH
+    - keyword: CONTACT
+    - bracketed:
+        start_bracket: (
+        keyword: STEWARD
+        comparison_operator:
+          raw_comparison_operator: '='
+        object_reference:
+          naked_identifier: c1
+        end_bracket: )
+- statement_terminator: ;
+- statement:
+    create_schema_statement:
+    - keyword: CREATE
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: s1
+    - keyword: FROM
+    - keyword: BACKUP
+    - keyword: SET
+    - object_reference:
+        naked_identifier: my_backup_set
+    - keyword: IDENTIFIER
+    - quoted_literal: "'backup_id_1'"
 - statement_terminator: ;

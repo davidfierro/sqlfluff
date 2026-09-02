@@ -5359,10 +5359,39 @@ class CreateSchemaStatementSegment(ansi.CreateSchemaStatementSegment):
             Sequence("DEFINE", "SCHEMA"),
         ),
         Ref("SchemaReferenceSegment"),
-        Sequence("WITH", "MANAGED", "ACCESS", optional=True),
-        Ref("SchemaObjectParamsSegment", optional=True),
-        Ref("TagBracketedEqualsSegment", optional=True),
-        Ref("ContactBracketedGrammar", optional=True),
+        OneOf(
+            # CREATE SCHEMA <name> FROM BACKUP SET <backup_set>
+            #   IDENTIFIER '<backup_id>'
+            Sequence(
+                "FROM",
+                "BACKUP",
+                "SET",
+                Ref("ObjectReferenceSegment"),
+                "IDENTIFIER",
+                Ref("QuotedLiteralSegment"),
+            ),
+            Sequence(
+                # [ CLONE <source_schema> [ { AT | BEFORE } ( ... ) ]
+                #   [ IGNORE TABLES WITH INSUFFICIENT DATA RETENTION ]
+                #   [ IGNORE HYBRID TABLES ] ]
+                Sequence(
+                    "CLONE",
+                    Ref("ObjectReferenceSegment"),
+                    OneOf(
+                        Ref("FromAtExpressionSegment"),
+                        Ref("FromBeforeExpressionSegment"),
+                        optional=True,
+                    ),
+                    Ref("CloneIgnoreOptionsGrammar", optional=True),
+                    optional=True,
+                ),
+                Sequence("WITH", "MANAGED", "ACCESS", optional=True),
+                Ref("SchemaObjectParamsSegment", optional=True),
+                Ref("TagBracketedEqualsSegment", optional=True),
+                Ref("ContactBracketedGrammar", optional=True),
+            ),
+            optional=True,
+        ),
     )
 
 
