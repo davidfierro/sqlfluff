@@ -3,7 +3,7 @@
 # computed by SQLFluff when running the tests. Please run
 # `python test/generate_parse_fixture_yml.py`  to generate them after adding or
 # altering SQL files.
-_hash: da7f46226d3946f18e47d4088d6962a88f798ae56f4b07d9ce1be58a1130f57e
+_hash: 428b862362bf24a00a1eeff3d3a771787379c6317ecfe9848bc753eeb80ea005
 file:
 - statement:
     create_database_statement:
@@ -217,4 +217,83 @@ file:
     - keyword: TABLES
     - keyword: COPY
     - keyword: GRANTS
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: clone_db
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: source_db
+    - keyword: INCLUDE
+    - keyword: INTERNAL
+    - keyword: STAGES
+- statement_terminator: ;
+- statement:
+    create_schema_statement:
+    - keyword: CREATE
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: clone_schema
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: source_schema
+    - keyword: INCLUDE
+    - keyword: INTERNAL
+    - keyword: STAGES
+- statement_terminator: ;
+- statement:
+    create_database_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: REPLACE
+    - keyword: DATABASE
+    - database_reference:
+        naked_identifier: clone_db
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: source_db
+    - from_at_expression:
+        keyword: AT
+        bracketed:
+          start_bracket: (
+          keyword: TIMESTAMP
+          parameter_assigner: =>
+          expression:
+            cast_expression:
+              quoted_literal: "'2025-04-01 12:00:00'"
+              casting_operator: '::'
+              data_type:
+                keyword: TIMESTAMP
+          end_bracket: )
+    - keyword: IGNORE
+    - keyword: TABLES
+    - keyword: WITH
+    - keyword: INSUFFICIENT
+    - keyword: DATA
+    - keyword: RETENTION
+    - keyword: IGNORE
+    - keyword: HYBRID
+    - keyword: TABLES
+    - keyword: INCLUDE
+    - keyword: INTERNAL
+    - keyword: STAGES
+- statement_terminator: ;
+- statement:
+    create_schema_statement:
+    - keyword: CREATE
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: clone_schema
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: source_schema
+    - keyword: INCLUDE
+    - keyword: INTERNAL
+    - keyword: STAGES
+    - keyword: IGNORE
+    - keyword: HYBRID
+    - keyword: TABLES
 - statement_terminator: ;

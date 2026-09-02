@@ -916,11 +916,12 @@ snowflake_dialect.add(
         ),
     ),
     CopyTagsGrammar=Sequence("COPY", "TAGS"),
-    # The optional IGNORE clauses accepted after CLONE.
+    # The optional clauses accepted after CLONE for databases and schemas.
     # https://docs.snowflake.com/en/sql-reference/sql/create-clone
-    CloneIgnoreOptionsGrammar=AnySetOf(
+    CloneOptionsGrammar=AnySetOf(
         Sequence("IGNORE", "TABLES", "WITH", "INSUFFICIENT", "DATA", "RETENTION"),
         Sequence("IGNORE", "HYBRID", "TABLES"),
+        Sequence("INCLUDE", "INTERNAL", "STAGES"),
     ),
     # The SET/UNSET actions those policies share between the ALTER
     # statements of tables, views and dynamic tables.
@@ -4067,7 +4068,7 @@ class CreateCloneStatementSegment(BaseSegment):
                     Ref("FromBeforeExpressionSegment"),
                     optional=True,
                 ),
-                Ref("CloneIgnoreOptionsGrammar", optional=True),
+                Ref("CloneOptionsGrammar", optional=True),
             ),
             # Tables (TRANSIENT is only valid for a plain TABLE) and the
             # other schema-level objects.
@@ -4142,7 +4143,7 @@ class CreateDatabaseStatementSegment(ansi.CreateDatabaseStatementSegment):
                         Ref("FromBeforeExpressionSegment"),
                         optional=True,
                     ),
-                    Ref("CloneIgnoreOptionsGrammar", optional=True),
+                    Ref("CloneOptionsGrammar", optional=True),
                     optional=True,
                 ),
                 AnySetOf(
@@ -5382,7 +5383,7 @@ class CreateSchemaStatementSegment(ansi.CreateSchemaStatementSegment):
                         Ref("FromBeforeExpressionSegment"),
                         optional=True,
                     ),
-                    Ref("CloneIgnoreOptionsGrammar", optional=True),
+                    Ref("CloneOptionsGrammar", optional=True),
                     optional=True,
                 ),
                 Sequence("WITH", "MANAGED", "ACCESS", optional=True),
