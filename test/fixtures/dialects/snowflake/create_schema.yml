@@ -3,7 +3,7 @@
 # computed by SQLFluff when running the tests. Please run
 # `python test/generate_parse_fixture_yml.py`  to generate them after adding or
 # altering SQL files.
-_hash: e1d5e0b28a08ed91f68a8a4a049482ad6e63b58ab9344f2ccc691a4e365bd1aa
+_hash: bb8be5725d2386349479016cf683b1a0187ea069fbe6a6722f75e478cffd0c93
 file:
 - statement:
     create_schema_statement:
@@ -376,4 +376,74 @@ file:
         naked_identifier: my_backup_set
     - keyword: IDENTIFIER
     - quoted_literal: "'backup_id_1'"
+- statement_terminator: ;
+- statement:
+    create_schema_statement:
+    - keyword: CREATE
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: s1
+    - schema_object_properties:
+      - keyword: DEFAULT_METADATA_WRITE_FORMAT
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - keyword: ICEBERG
+- statement_terminator: ;
+- statement:
+    create_schema_statement:
+    - keyword: CREATE
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: s1
+    - schema_object_properties:
+      - keyword: DEFAULT_METADATA_WRITE_FORMAT
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - keyword: SNOWFLAKE
+      - keyword: DATA_RETENTION_TIME_IN_DAYS
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - numeric_literal: '1'
+- statement_terminator: ;
+- statement:
+    create_schema_statement:
+    - keyword: CREATE
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: s1
+    - schema_object_properties:
+      - keyword: CATALOG
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - quoted_literal: "'SNOWFLAKE'"
+      - keyword: DEFAULT_METADATA_WRITE_FORMAT
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - keyword: ICEBERG
+      - comment_equals_clause:
+          keyword: COMMENT
+          comparison_operator:
+            raw_comparison_operator: '='
+          quoted_literal: "'x'"
+- statement_terminator: ;
+- statement:
+    create_schema_statement:
+    - keyword: CREATE
+    - keyword: SCHEMA
+    - schema_reference:
+        naked_identifier: s1
+    - schema_object_properties:
+      - keyword: DATA_RETENTION_TIME_IN_DAYS
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - numeric_literal: '1'
+      - comment_equals_clause:
+          keyword: COMMENT
+          comparison_operator:
+            raw_comparison_operator: '='
+          quoted_literal: "'x'"
+      - keyword: DEFAULT_METADATA_WRITE_FORMAT
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - keyword: ICEBERG
 - statement_terminator: ;

@@ -4219,6 +4219,12 @@ class CreateDatabaseStatementSegment(ansi.CreateDatabaseStatementSegment):
                         Ref("EqualsSegment"),
                         Ref("CatalogSyncNamespaceFlattenDelimeter"),
                     ),
+                    # Documented in the CREATE DATABASE parameter list only.
+                    Sequence(
+                        "DEFAULT_METADATA_WRITE_FORMAT",
+                        Ref("EqualsSegment"),
+                        OneOf("SNOWFLAKE", "ICEBERG"),
+                    ),
                     Ref("LogLevelEqualsSegment"),
                     Ref("MetricLevelEqualsSegment"),
                     Ref("TraceLevelEqualsSegment"),
@@ -5387,7 +5393,7 @@ class CreateSchemaStatementSegment(ansi.CreateSchemaStatementSegment):
                     optional=True,
                 ),
                 Sequence("WITH", "MANAGED", "ACCESS", optional=True),
-                Ref("SchemaObjectParamsSegment", optional=True),
+                Ref("CreateSchemaObjectParamsSegment", optional=True),
                 Ref("TagBracketedEqualsSegment", optional=True),
                 Ref("ContactBracketedGrammar", optional=True),
             ),
@@ -5581,7 +5587,8 @@ class SchemaObjectParamsSegment(BaseSegment):
 
     type = "schema_object_properties"
 
-    match_grammar = AnySetOf(
+    # The parameters CREATE SCHEMA and ALTER SCHEMA ... SET share.
+    _schema_object_params = [
         Sequence(
             "DATA_RETENTION_TIME_IN_DAYS",
             Ref("EqualsSegment"),
@@ -5704,6 +5711,25 @@ class SchemaObjectParamsSegment(BaseSegment):
             ),
         ),
         Ref("CommentEqualsClauseSegment"),
+    ]
+    match_grammar = AnySetOf(*_schema_object_params)
+
+
+class CreateSchemaObjectParamsSegment(SchemaObjectParamsSegment):
+    """The `CREATE SCHEMA` parameters.
+
+    The shared schema parameters plus the ones the CREATE SCHEMA docs list but
+    ALTER SCHEMA does not.
+    https://docs.snowflake.com/en/sql-reference/sql/create-schema.html
+    """
+
+    match_grammar = AnySetOf(
+        *SchemaObjectParamsSegment._schema_object_params,
+        Sequence(
+            "DEFAULT_METADATA_WRITE_FORMAT",
+            Ref("EqualsSegment"),
+            OneOf("SNOWFLAKE", "ICEBERG"),
+        ),
     )
 
 
