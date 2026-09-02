@@ -5645,11 +5645,9 @@ class SchemaObjectParamsSegment(BaseSegment):
             Ref("EqualsSegment"),
             OneOf(Ref("QuotedLiteralSegment"), Ref("ObjectReferenceSegment")),
         ),
-        Sequence(
-            "OBJECT_VISIBILITY",
-            Ref("EqualsSegment"),
-            OneOf("PRIVILEGED", Ref("DollarQuotedUDFBody")),
-        ),
+        # CREATE SCHEMA and ALTER SCHEMA document OBJECT_VISIBILITY = PRIVILEGED
+        # only; the <object_visibility_spec> YAML form is a database option.
+        Sequence("OBJECT_VISIBILITY", Ref("EqualsSegment"), "PRIVILEGED"),
         Sequence(
             "ENABLE_DATA_COMPACTION",
             Ref("EqualsSegment"),
