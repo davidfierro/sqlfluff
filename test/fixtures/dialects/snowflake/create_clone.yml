@@ -3,7 +3,7 @@
 # computed by SQLFluff when running the tests. Please run
 # `python test/generate_parse_fixture_yml.py`  to generate them after adding or
 # altering SQL files.
-_hash: 428b862362bf24a00a1eeff3d3a771787379c6317ecfe9848bc753eeb80ea005
+_hash: 8d2d5088fa2933b392fc80c00f4072a8e515604d475814294fa45436c3b08ce0
 file:
 - statement:
     create_database_statement:
@@ -296,4 +296,95 @@ file:
     - keyword: IGNORE
     - keyword: HYBRID
     - keyword: TABLES
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: EVENT
+    - keyword: TABLE
+    - object_reference:
+        naked_identifier: clone_events
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: source_events
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: REPLACE
+    - keyword: EVENT
+    - keyword: TABLE
+    - object_reference:
+        naked_identifier: clone_events
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: source_events
+    - from_at_expression:
+        keyword: AT
+        bracketed:
+          start_bracket: (
+          keyword: OFFSET
+          parameter_assigner: =>
+          expression:
+            numeric_literal:
+              sign_indicator: '-'
+              numeric_literal: '3600'
+          end_bracket: )
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: ALERT
+    - object_reference:
+        naked_identifier: clone_alert
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: source_alert
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: REPLACE
+    - keyword: ALERT
+    - keyword: IF
+    - keyword: NOT
+    - keyword: EXISTS
+    - object_reference:
+        naked_identifier: clone_alert
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: source_alert
+- statement_terminator: ;
+- statement:
+    create_database_role_statement:
+    - keyword: CREATE
+    - keyword: DATABASE
+    - keyword: ROLE
+    - database_role_reference:
+        naked_identifier: clone_role
+    - keyword: CLONE
+    - database_role_reference:
+        naked_identifier: source_role
+- statement_terminator: ;
+- statement:
+    create_database_role_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: REPLACE
+    - keyword: DATABASE
+    - keyword: ROLE
+    - keyword: IF
+    - keyword: NOT
+    - keyword: EXISTS
+    - database_role_reference:
+      - naked_identifier: db1
+      - dot: .
+      - naked_identifier: clone_role
+    - keyword: CLONE
+    - database_role_reference:
+      - naked_identifier: db1
+      - dot: .
+      - naked_identifier: source_role
 - statement_terminator: ;

@@ -40,3 +40,11 @@ CREATE OR REPLACE DATABASE clone_db CLONE source_db
 CREATE SCHEMA clone_schema CLONE source_schema
     INCLUDE INTERNAL STAGES
     IGNORE HYBRID TABLES;
+
+-- docs create-clone: event tables, alerts and database roles
+CREATE EVENT TABLE clone_events CLONE source_events;
+CREATE OR REPLACE EVENT TABLE clone_events CLONE source_events AT (OFFSET => -3600);
+CREATE ALERT clone_alert CLONE source_alert;
+CREATE OR REPLACE ALERT IF NOT EXISTS clone_alert CLONE source_alert;
+CREATE DATABASE ROLE clone_role CLONE source_role;
+CREATE OR REPLACE DATABASE ROLE IF NOT EXISTS db1.clone_role CLONE db1.source_role;

@@ -4076,6 +4076,8 @@ class CreateCloneStatementSegment(BaseSegment):
                 OneOf(
                     Sequence(Sequence("TRANSIENT", optional=True), "TABLE"),
                     Sequence("DYNAMIC", "TABLE"),
+                    Sequence("EVENT", "TABLE"),
+                    "ALERT",
                     "SEQUENCE",
                     Sequence("FILE", "FORMAT"),
                     "STAGE",
@@ -9472,8 +9474,12 @@ class CreateDatabaseRoleStatementSegment(BaseSegment):
             Sequence("DEFINE", "DATABASE", "ROLE"),
         ),
         Ref("DatabaseRoleReferenceSegment"),
-        Ref(
-            "CommentEqualsClauseSegment",
+        OneOf(
+            # CREATE [ OR REPLACE ] DATABASE ROLE [ IF NOT EXISTS ] <name>
+            #   CLONE <source_database_role_name>
+            # https://docs.snowflake.com/en/sql-reference/sql/create-clone
+            Sequence("CLONE", Ref("DatabaseRoleReferenceSegment")),
+            Ref("CommentEqualsClauseSegment"),
             optional=True,
         ),
     )
