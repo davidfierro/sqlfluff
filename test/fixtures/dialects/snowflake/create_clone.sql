@@ -48,3 +48,16 @@ CREATE ALERT clone_alert CLONE source_alert;
 CREATE OR REPLACE ALERT IF NOT EXISTS clone_alert CLONE source_alert;
 CREATE DATABASE ROLE clone_role CLONE source_role;
 CREATE OR REPLACE DATABASE ROLE IF NOT EXISTS db1.clone_role CLONE db1.source_role;
+
+-- docs create-clone: dynamic table and Iceberg table clones with Time Travel
+--   CREATE [ OR REPLACE ] DYNAMIC TABLE <name> CLONE <source> [ { AT | BEFORE } ( ... ) ]
+--     [ TARGET_LAG = ... WAREHOUSE = <warehouse_name> ]
+--   CREATE [ OR REPLACE ] ICEBERG TABLE [ IF NOT EXISTS ] <name> CLONE <source>
+--     [ { AT | BEFORE } ( ... ) ] [ COPY GRANTS ]
+CREATE OR REPLACE DYNAMIC TABLE dt_clone CLONE dt_source
+  AT (TIMESTAMP => '2025-04-01 12:00:00'::TIMESTAMP)
+  TARGET_LAG = '1 hour'
+  WAREHOUSE = my_wh;
+CREATE OR REPLACE ICEBERG TABLE IF NOT EXISTS iceberg_clone CLONE iceberg_source
+  BEFORE (STATEMENT => '8e5d0ca9-005e-44e6-b858-a8f5b37c5726')
+  COPY GRANTS;

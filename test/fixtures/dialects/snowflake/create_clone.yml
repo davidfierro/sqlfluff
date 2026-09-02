@@ -3,7 +3,7 @@
 # computed by SQLFluff when running the tests. Please run
 # `python test/generate_parse_fixture_yml.py`  to generate them after adding or
 # altering SQL files.
-_hash: 8d2d5088fa2933b392fc80c00f4072a8e515604d475814294fa45436c3b08ce0
+_hash: 0932021c279e3756c989f91dd907f0ba9aff137b2059c4bc7cf68fe33aa634d5
 file:
 - statement:
     create_database_statement:
@@ -387,4 +387,67 @@ file:
       - naked_identifier: db1
       - dot: .
       - naked_identifier: source_role
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: REPLACE
+    - keyword: DYNAMIC
+    - keyword: TABLE
+    - object_reference:
+        naked_identifier: dt_clone
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: dt_source
+    - from_at_expression:
+        keyword: AT
+        bracketed:
+          start_bracket: (
+          keyword: TIMESTAMP
+          parameter_assigner: =>
+          expression:
+            cast_expression:
+              quoted_literal: "'2025-04-01 12:00:00'"
+              casting_operator: '::'
+              data_type:
+                keyword: TIMESTAMP
+          end_bracket: )
+    - dynamic_table_options:
+      - keyword: TARGET_LAG
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - dynamic_table_lag_interval_segment: "'1 hour'"
+      - keyword: WAREHOUSE
+      - comparison_operator:
+          raw_comparison_operator: '='
+      - object_reference:
+          naked_identifier: my_wh
+- statement_terminator: ;
+- statement:
+    create_clone_statement:
+    - keyword: CREATE
+    - keyword: OR
+    - keyword: REPLACE
+    - keyword: ICEBERG
+    - keyword: TABLE
+    - keyword: IF
+    - keyword: NOT
+    - keyword: EXISTS
+    - object_reference:
+        naked_identifier: iceberg_clone
+    - keyword: CLONE
+    - object_reference:
+        naked_identifier: iceberg_source
+    - from_before_expression:
+        keyword: BEFORE
+        bracketed:
+          start_bracket: (
+          keyword: STATEMENT
+          parameter_assigner: =>
+          expression:
+            quoted_literal: "'8e5d0ca9-005e-44e6-b858-a8f5b37c5726'"
+          end_bracket: )
+    - keyword: COPY
+    - keyword: GRANTS
 - statement_terminator: ;

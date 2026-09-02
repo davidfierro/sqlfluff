@@ -4075,8 +4075,8 @@ class CreateCloneStatementSegment(BaseSegment):
             Sequence(
                 OneOf(
                     Sequence(Sequence("TRANSIENT", optional=True), "TABLE"),
-                    Sequence("DYNAMIC", "TABLE"),
                     Sequence("EVENT", "TABLE"),
+                    Sequence("ICEBERG", "TABLE"),
                     "ALERT",
                     "SEQUENCE",
                     Sequence("FILE", "FORMAT"),
@@ -4093,6 +4093,22 @@ class CreateCloneStatementSegment(BaseSegment):
                     Ref("FromBeforeExpressionSegment"),
                     optional=True,
                 ),
+            ),
+            # Dynamic tables may set TARGET_LAG and WAREHOUSE after the
+            # clone source and its optional AT | BEFORE clause.
+            Sequence(
+                "DYNAMIC",
+                "TABLE",
+                Ref("IfNotExistsGrammar", optional=True),
+                Ref("ObjectReferenceSegment"),
+                "CLONE",
+                Ref("ObjectReferenceSegment"),
+                OneOf(
+                    Ref("FromAtExpressionSegment"),
+                    Ref("FromBeforeExpressionSegment"),
+                    optional=True,
+                ),
+                Ref("DynamicTableOptionsSegment", optional=True),
             ),
         ),
         Sequence("COPY", "GRANTS", optional=True),
